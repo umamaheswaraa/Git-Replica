@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Git-Replica</title>
+<script type="text/javascript" src="js/jquery-1.7.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		$(".go-btn").live('click',function(){
+			var htmlStr_folder="";
+			var htmlStr_files="";
+			var searchVal = $("#search").val();
+			var url = "http://localhost:8080/Git-Replica/content/fetchInfo.htm";
+			$.ajax({
+				url: url+'?searchVal='+searchVal,
+				type:'GET',
+				async:false,
+				success:function(result){
+					 if(result!=null){
+						var myObj = JSON.parse(result);
+						for(var key in myObj)
+						{
+							if(myObj[key]==2){
+								htmlStr_folder= htmlStr_folder+'<div class="div-size"><img style="vertical-align: center;" class="margin" src="images/Pictures-icon.png"><span class="text-size">&nbsp;'+key+'</span></div>';
+							}else{
+								htmlStr_files = htmlStr_files+ '<div class="div-size"><img style="vertical-align: center;" class="margin" src="images/text-image-icon.png"><span style="text-size">&nbsp;'+key+'</span></div>';
+							}
+								
+						}
+					}	 
+				},
+				failure:function(result){
+					
+				}
+				
+			});
+			htmlStr = '<div><h1 class="mc-title">Project Name</h1></div><div style="width:80%; background-color:#fff;border:1px solid #bbb;margin-bottom: 0px;"><div style="display: inline-block;width:20%; height:15px; margin:1em;"><h3>commits</h3></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><h3 class="label-1">branch</h3></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><h3 class="label-1">releases</h3></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><h3 class="label-1">contrubutor</h3></div></div><div style="width:100%;"><div style="display: inline-block;width:40%;height:0px;border-bottom: 10px solid #1f085e;margin:0;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #f15501;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #b07219;"></div></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: blue; font-weight: bold; margin:">Project Name<h1></div>' ;
+			
+			$("#mc-table-results").html(htmlStr+"<div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='div-size' style='background-color:#C5E2FF;'>Added Comments</div><div class='mc-title1'>user name</div><div>"+htmlStr_folder+"</div><div>"+htmlStr_files+"</div></div");
+			
+		});
+	});
+
+</script>
+
+</head>
+<body>
+	<div class="main-cont">
+		<div class="wrapper">
+			<div class="mc-rounded"> 
+				<div class="mc-header hidden">
+								<h1 class="label-2">Git Replica</h1>
+								<input id="search" style="width:240px;" name="words" class="tgf-textbox flt-left" type="text" placeholder="Search or type a command">
+								<input class="go-btn custom-btn-1" type="submit" value="Go">
+							<div style="padding:8px;right:5px;top:5px;float:right;position:relative;border:1px solid #ddd;">
+								<input type="submit" value="Login" class="custom-btn-2">
+							</div>
+				</div>
+				<div id="mc-table-results" style="min-height:400px;">
+						
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

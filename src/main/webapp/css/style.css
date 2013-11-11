@@ -1,0 +1,295 @@
+html, body,div,table, caption, tbody, tfoot, thead, tr, th, td,input,
+h1,h2,h3,h4,h5,h6,img{
+	margin:0;
+	padding:0;
+	border:0;
+	font-size:12px;
+	vertical-align:baseline;
+	font-weight:normal;
+	color:#333;
+}
+body{
+	font-family:vendenta;
+	line-height:1;
+}
+table{
+	border-collapse:collapse;
+	border-spacing:0;
+}
+img{
+	cursor:pointer;
+}
+a{text-decoration: none;}
+.bold{font-weight: bold}
+.hidden{
+	overflow: hidden;
+}
+.flt-left{float:left;}
+.wrapper{
+	min-width: 1000px;
+	max-width:1200px;
+	padding: 0px 10px;
+	margin: 0 auto;
+}
+form{
+	border:none;
+	margin:0
+}
+.custom-btn-1{
+	border: 1px solid #bbb9b9;
+	height:32px;
+	border-radius: 4px;
+	color: #666b6d;
+	font-size: 12px;
+	font-weight: bold;
+	font-family:sans-serif;	
+	padding: 1px 15px 5px 15px;
+	margin-left:10px;
+	background-color: #d6d3d3;
+	
+/*gradient css begins*/	
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(210,207,207,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(210,207,207,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(210,207,207,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(210,207,207,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(210,207,207,1) 100%); /* IE10+ */
+	background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(210,207,207,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#d2cfcf',GradientType=0 ); /* IE6-9 */
+/*gradient css ends*/
+}
+.custom-btn-1:hover{
+	background-color: #f4f4f4;
+	color: #434748;
+	
+	background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(241,240,240,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(241,240,240,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(241,240,240,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(241,240,240,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(241,240,240,1) 100%); /* IE10+ */
+background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(241,240,240,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f1f0f0',GradientType=0 ); /* IE6-9 */
+
+}
+.custom-btn-2{
+	border: 1px solid #52a042;
+	height:32px;
+	border-radius: 4px;
+	color: #666b6d;
+	font-size: 12px;
+	font-weight: bold;
+	font-family:sans-serif;	
+	padding: 1px 10px 5px 10px;
+	background-color: #bfd79d;
+	margin-left:10px;
+	
+	background: rgb(223,248,198); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(223,248,198,1) 0%, rgba(191,215,157,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(223,248,198,1)), color-stop(100%,rgba(191,215,157,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(223,248,198,1) 0%,rgba(191,215,157,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(223,248,198,1) 0%,rgba(191,215,157,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(223,248,198,1) 0%,rgba(191,215,157,1) 100%); /* IE10+ */
+	background: linear-gradient(top,  rgba(223,248,198,1) 0%,rgba(191,215,157,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dff8c6', endColorstr='#bfd79d',GradientType=0 ); /* IE6-9 */
+
+}
+.custom-btn-2:hover{
+	background-color: #dbeec4;
+	color: #3b3f40;
+	
+	background: rgb(224,248,199); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(224,248,199,1) 0%, rgba(211,231,186,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(224,248,199,1)), color-stop(100%,rgba(211,231,186,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(224,248,199,1) 0%,rgba(211,231,186,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(224,248,199,1) 0%,rgba(211,231,186,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(224,248,199,1) 0%,rgba(211,231,186,1) 100%); /* IE10+ */
+background: linear-gradient(top,  rgba(224,248,199,1) 0%,rgba(211,231,186,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f8c7', endColorstr='#d3e7ba',GradientType=0 ); /* IE6-9 */
+
+}
+
+.custom-btn-1:hover, .custom-btn-2:hover{cursor: pointer;}
+
+.main-cont{
+	overflow:hidden;
+	box-shadow: 0px 12px 12px -12px #ccc inset;
+}
+.mc-rounded{
+	
+	background-color:#fff;
+	border:2px solid #bbb;
+	border-radius:7px;
+	overflow:hidden;
+	margin:10px 0px;
+	box-shadow: 0 0 10px #ccc;
+	position: relative;
+	min-height:400px;
+}
+.mc-header{
+	background-color:#fff;
+	overflow:hidden;
+}
+.mc-title{
+	font-size: 18px;
+	color: #333333;
+	font-weight: bold;
+	margin:25px 10px 0px 10px;
+}
+.mc-title1{
+	font-size: 14px;
+	color: #333333;
+	font-weight: bold;
+	margin:25px 10px 0px 10px;
+}
+table{
+	width: 100%;
+	overflow:hidden;
+	clear:both !important;
+}
+table tr{
+	height: 25px;
+	font-size: 12px;
+	border-bottom: 1px solid #dddddd;
+}
+table td{
+	padding: 5px;
+	border-right: 1px solid #cbcbcb;
+}
+thead tr{
+	border-top: 1px solid #91abbd;
+	border-bottom: 1px solid #91abbd;
+	background-color: #d1edf6;
+}
+.general-form{
+	padding: 0px 0px 10px 0px;
+	background-color: #fff;
+	border-bottom: 1px solid #dcdcdc;
+}
+.tgf-textbox{
+	border: 1px solid #ccc;
+	box-shadow: inset 1px 1px 2px #e8e8e8;
+	clear: both;
+	width: 240px;
+	height: 35px;
+	border-radius: 2px;
+	margin: 5px 0px 15px;
+	padding: 0px 5px;
+	color:gray;
+}
+.tgf-textbox:disabled{
+	border: 1px solid #dddddd;
+	box-shadow: inset 1px 1px 2px #e8e8e8;
+	height: 35px;
+	border-radius: 2px;
+	margin: 5px 0px 15px;
+	padding: 0px 5px;
+	color:gray;
+}
+.mc-header .tgf-textbox{
+	margin: 5px;
+	font-size:12px;
+	
+}
+thead tr td:hover{background-color: #A3DAEC;}
+body{background-color: #f6f6f6;}
+thead tr:last-child{border-right:none; }
+.gf-div{overflow: hidden;padding-left: 10px;padding-top:10px;}
+.go-btn{
+	border-radius: 5px 5px 5px 5px;
+    height: 36px;
+    margin: 5px;
+    padding: 9px;
+}
+.label-3{
+	font-size:14px;color:#333;font-weight: bold;margin:10px 10px 10px 10px;
+}
+.label-4{
+	margin:15px;
+}
+#table-results{
+	width:70%;
+	display:inline-block;
+	overflow-x: auto;
+    overflow-y: hidden;
+}
+.label-1 a{font-size: 11px;}
+.label-2{
+	font-size: 12px;
+	line-height: 16px;
+	color: #333;
+	margin:10px 10px 0px 10px;
+}
+.label-3{
+	font-size:14px;color:#333;font-weight: bold;margin:10px 10px 10px 10px;
+}
+.label-4{
+	margin:10px 10px 10px 10px;
+}
+.message-label{
+	display: inline-block;
+	padding:10px;
+	font-size:16px;
+	font-weight:bold;
+}
+.message-label label{
+	color:gray;
+	padding: 10px;
+    position: absolute;
+}
+.row_size{
+	border-color: #ABADB3 #E2E3EA #E2E3EA;
+    border-style: solid;
+    border-width: 1px;
+    float: left;
+    height: 12px;
+    margin: 7px;
+    padding: 3px 3px 3px 4px;
+    width: 30px;
+    font-size:12px;
+}
+.actions img{
+	margin-left:12px;
+	cursor: pointer;
+}
+
+.mcb-left{
+	float:left;
+	background-color: #eae9e9;
+	min-height: 410px;
+	border:1px solid #ccc;
+	cursor: pointer;
+	border-top: none;
+}
+
+.table-wrapper{
+	width: 50%;
+	height:15px;
+	padding: 0px 10px;
+	margin: 0 auto;
+	align:center;
+}
+
+.header-table{
+	display: inline-block;width: 20px; height: 20px; margin: 1em;
+}
+.text-size{
+	height: 35px;
+	font-size: 16px;
+	line-height: 16px;
+	color: #5CADFF;
+	margin:10px 10px 0px 10px;
+	font-size: 12px;
+}
+.div-size{
+	height: 35px;
+	border:1px solid #ccc;
+	margin: 0x 0px 0px;
+	padding: 0px 5px;
+	color:gray;
+	background-color:#FFFFFF;
+}
+.img.margin{
+	vertical-align: center;
+	margin: 15x 10px 10px;
+}
