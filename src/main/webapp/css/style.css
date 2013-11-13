@@ -293,3 +293,16 @@ thead tr:last-child{border-right:none; }
 	vertical-align: center;
 	margin: 15x 10px 10px;
 }
+.tgt-link{
+	color: #0066cc;
+	cursor:pointer;
+	font-size:12px;
+}
+.tgt-link-pre{
+	color: #0066cc;
+	cursor:pointer;
+	font-size:12px;
+}
+.margL10{
+	margin-left: 10px;
+}

@@ -2,6 +2,7 @@ package com.imaginea.gr.service;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LsRemoteCommand;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,5 +116,59 @@ public class TestContestService {
 	public void getProjectNameWithNoDot(){
 		System.out.println("getProjectNameWIthNoDot :");
 			//contentService.getProjectName("git@github.com:umamaheswaraa/CRUD-App");
+	}
+	
+	@Test
+	public void getByteContent(){
+		
+		try{
+			String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+			contentService.getByteContent(path, null);
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	@Test
+	public void getFileAttributes(){
+		//String path = "/users/umamaheswaraa/git/CRUD-App/";
+		String path="git@github.com:umamaheswaraa/CRUD-App.git";
+		contentService.getFileAttributes(path);
+	}
+	
+	@Test
+	public void getbrowseTree(){
+		String path = "/users/umamaheswaraa/git/CRUD-App/";
+		//contentService.browseTree(path,"src/main/resources",null);
+	}
+	
+	@Test
+	public void getSubFolderDetailsTest(){
+		String path = "/users/umamaheswaraa/git/CRUD-App/";
+		contentService.getSubFolderDetails(path,"src/main/resources/","null");
+	}
+	@Test
+	public void TestgetSubPath(){
+		String prepath="src/";
+		contentService.getSubPath(prepath);
+			
+	}
+	@Test
+	public void getBlobContent(){
+		String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		String subpath="pom.xml";
+		contentService.getBlobContent(path, subpath);
+	}
+	@Test
+	public void getCommitBytes(){
+		String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		String subpath="pom.xml";
+		contentService.getStringContent(path, subpath,null);
+	}
+	@Test
+	public void getCommitBytesForJavaFile(){
+		String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		String subpath="src/main/java/com/imaginea/crud/controller/EmployeeController.java";
+		contentService.getStringContent(path, subpath,null);
 	}
 }
