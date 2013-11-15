@@ -10,5 +10,7 @@ public interface Constants {
 	public static int FILE_DIRECTORY=2;
 	public static int FILE_NORMAL=3;
 	public static String ORGIN="refs/remotes/origin/";
+	public static String TMP_FOLDER="tmp/";
+	public static String git_FOLDER="/git/";
 	
 }
