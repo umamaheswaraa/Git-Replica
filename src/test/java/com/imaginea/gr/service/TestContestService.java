@@ -64,7 +64,7 @@ public class TestContestService {
 		try{
 			
 			String searchUrl = "git@github.com:umamaheswaraa/CRUD-App.git";
-			contentService.getReposotoryContent(searchUrl,null);
+			contentService.getReposotoryContent(searchUrl,null,"CRUD-App");
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -75,7 +75,7 @@ public class TestContestService {
 		System.out.println("Test Get Content");
 		try{
 			String searchUrl = "git@github.com:umamaheswaraa/CRUD-App.git";
-			contentService.getReposotoryContent(searchUrl,"akasam");
+			contentService.getReposotoryContent(searchUrl,"akasam","CRUD-App");
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -171,4 +171,41 @@ public class TestContestService {
 		String subpath="src/main/java/com/imaginea/crud/controller/EmployeeController.java";
 		contentService.getStringContent(path, subpath,null);
 	}
+	@Test
+	public void getRepositoryConfigDetails(){
+		String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		
+		contentService.fetchUserInfo(path, null);
+	}
+	@Test
+	public void getListOfCommits(){
+		String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		
+		contentService.getListOfCommits(path, null);
+	}
+	@Test
+	public void getListOfRemotes(){
+		//String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		String path = "https://github.com/centic9/jgit-cookbook.git";
+		contentService.getListOfRemotes(path, null);
+	}
+	@Test
+	public void getListOfTags(){
+		//String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		String path = "https://github.com/centic9/jgit-cookbook.git";
+		contentService.getListOfTags(path, null);
+	}
+	@Test
+	public void getListOfContributors(){
+		//String path = "git@github.com:umamaheswaraa/CRUD-App.git";
+		String path = "https://github.com/centic9/jgit-cookbook.git";
+		contentService.getListOfContributors(path, null);
+	}
+	@Test
+	public void readRemoteRepo(){
+		String path = "https://github.com/centic9/jgit-cookbook.git";
+		contentService.listRemoteRepo(path, null);
+	}
+	
+	
 }

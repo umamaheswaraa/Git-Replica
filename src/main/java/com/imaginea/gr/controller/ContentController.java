@@ -1,6 +1,7 @@
 package com.imaginea.gr.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,14 +26,22 @@ public class ContentController {
 	public @ResponseBody String getContentInfo(@RequestParam("searchVal") String searchVal){
 		String result=null;
 		String userName=null;
+		Map<String, Integer> map =null;
 		try{
-			Map<String, Integer> map = contentService.getReposotoryContent(searchVal,userName);
+			userName = contentService.fetchUserInfo(searchVal, null);
+			String projectName = contentService.getProjectName(searchVal);
+			if(projectName!=null){
+				map = contentService.getReposotoryContent(searchVal,userName,projectName);
+			}	
+			
 			Map<String , String> objectMap = new HashMap<String, String>();
 			objectMap.put("prePath", "");
-			
+			objectMap.put("userName", userName);
+			objectMap.put("projectName", projectName);
 			JSONObject jo = new JSONObject();
 			jo.put("Data", map);	
 			jo.put("otherData", objectMap);
+			
 			result = jo.toString();
  
 		}catch (Exception e) {
@@ -43,10 +52,18 @@ public class ContentController {
 	}
 	
 	@RequestMapping(value="getNextSubFolderInfo",method=RequestMethod.GET)
-	public @ResponseBody String getNextSubFolderInfo(@RequestParam("path") String path,@RequestParam("subPath") String subPath,@RequestParam("prePath") String prePath){
+	public @ResponseBody String getNextSubFolderInfo(@RequestParam("postData") String postData){
 		String result=null;
-		String userName=null;
 		try{
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String , String> dataMap = mapper.readValue(postData, java.util.HashMap.class);
+			
+			String prePath =dataMap.get("prePath");
+			String subPath =dataMap.get("subPath");
+			String userName =dataMap.get("userName");
+			String path =dataMap.get("path");
+			String projectName = dataMap.get("projectName");
+					
 			System.out.println("prePath "+prePath);
 			System.out.println("subpath :"+subPath);
 			
@@ -55,6 +72,8 @@ public class ContentController {
 			prePath = prePath+subPath+"/";
 			System.out.println("prePath : "+prePath);
 			objectMap.put("prePath",prePath);
+			objectMap.put("userName", userName);
+			objectMap.put("projectName", projectName);
 			
 			JSONObject jo = new JSONObject();
 			jo.put("Data", map);	
@@ -67,25 +86,42 @@ public class ContentController {
 		
 	}
 	@RequestMapping(value="getPreSubFolderInfo", method=RequestMethod.GET)
-	public @ResponseBody String getPreSubFolderInfo(@RequestParam("path") String path, @RequestParam("prePath") String prePath){
+	public @ResponseBody String getPreSubFolderInfo(@RequestParam("postData") String postData){
 		String result=null;
 		String userName=null;	
+		String projectName=null;
 		Map<String, Integer> map=null;
 		try{
-			System.out.println("prePath "+prePath);			
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String , String> dataMap = mapper.readValue(postData, java.util.HashMap.class);
+			
+			String prePath =dataMap.get("prePath");
+			userName =dataMap.get("userName");
+			String path =dataMap.get("path");
+			projectName = dataMap.get("projectName");
+			
 			String destPath = contentService.getSubPath(prePath);
+			if(userName==null || (userName!=null && userName.length()==0)){
+				userName = contentService.fetchUserInfo(path, null);
+			}
+			if(projectName==null || (projectName!=null && projectName.length()==0))
+			{
+				projectName = contentService.getProjectName(path);
+			}
 			
 			if(destPath!=null && destPath.length()>0)
 			{
 				map = contentService.getSubFolderDetails(path, destPath, userName);
 			}else{
-				map = contentService.getReposotoryContent(path, userName);
+				map = contentService.getReposotoryContent(path, userName, projectName);
 			}
 			 
 			Map<String , String> objectMap = new HashMap<String, String>();
 			prePath = destPath;
 			System.out.println("prePath : "+prePath);
 			objectMap.put("prePath",prePath);
+			objectMap.put("userName", userName);
+			objectMap.put("projectName", projectName);
 			
 			JSONObject jo = new JSONObject();
 			jo.put("Data", map);	
@@ -99,20 +135,123 @@ public class ContentController {
 		
 	}
 	
-	@RequestMapping(value="getContent",method=RequestMethod.GET)
-	public @ResponseBody String getStringContent(@RequestParam("path") String path, @RequestParam("prePath") String prePath, @RequestParam("subPath") String subPath){
-		String content=null;
+	@RequestMapping(value="getBlobContent",method=RequestMethod.GET)
+	public @ResponseBody String getStringContent(@RequestParam("postData") String postData){
+		String result=null;
 		String userName=null;
+		String projectName=null;
 		try{
-			contentService.getStringContent(path, prePath+subPath,userName);
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String , String> dataMap = mapper.readValue(postData, java.util.HashMap.class);
+			
+			String prePath =dataMap.get("prePath");
+			String subPath =dataMap.get("subPath");
+			userName =dataMap.get("userName");
+			String path =dataMap.get("path");
+			projectName = dataMap.get("projectName");
+			
+			String content = contentService.getStringContent(path, prePath+subPath,userName);
+			JSONObject jo = new JSONObject();
+			jo.put("Data", content);	
+			if(prePath!=null && prePath.length()>0){
+				jo.put("prePath", prePath+"/"+subPath);
+			}else{
+				jo.put("prePath", prePath+subPath);
+			}
+			
+			jo.put("userName", userName);
+			jo.put("projectName", projectName);
+			
+			result = jo.toString();
+			
 			
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
-		return content;
+		return result;
+	}
+	@RequestMapping(value="getListOfCommits",method=RequestMethod.GET)
+	public @ResponseBody String getListOfCommit(@RequestParam("postData") String postData){
+		String result=null;
+		String userName=null;
+		String projectName=null;
+
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String , String> dataMap = mapper.readValue(postData, java.util.HashMap.class);
+			
+			userName =dataMap.get("userName");
+			String path =dataMap.get("path");
+			projectName = dataMap.get("projectName");
+			Map<String, List<String>> map = contentService.getListOfCommits(path, userName);
+			JSONObject jo = new JSONObject();
+			jo.put("Data", map);	
+			jo.put("userName", userName);
+			jo.put("projectName", projectName);
+			
+			result = jo.toString();
+				
+				
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+			return result;
 	}
 	
+	@RequestMapping(value="getListOfRemotes",method=RequestMethod.GET)
+	public @ResponseBody String getListOfRemotes(@RequestParam("postData") String postData){
+		String result=null;
+		String userName=null;
+		String projectName=null;
+
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String , String> dataMap = mapper.readValue(postData, java.util.HashMap.class);
+			
+			userName =dataMap.get("userName");
+			String path =dataMap.get("path");
+			projectName = dataMap.get("projectName");
+			List<String> list = contentService.getListOfRemotes(path, userName);
+			JSONObject jo = new JSONObject();
+			jo.put("Data", list);	
+			jo.put("userName", userName);
+			jo.put("projectName", projectName);
+			
+			result = jo.toString();
+				
+				
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+			return result;
+	}
 	
-	
+	@RequestMapping(value="getListOfTags",method=RequestMethod.GET)
+	public @ResponseBody String getListOfTags(@RequestParam("postData") String postData){
+		String result=null;
+		String userName=null;
+		String projectName=null;
+
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			Map<String , String> dataMap = mapper.readValue(postData, java.util.HashMap.class);
+			
+			userName =dataMap.get("userName");
+			String path =dataMap.get("path");
+			projectName = dataMap.get("projectName");
+			List<String> list = contentService.getListOfTags(path, userName);
+			JSONObject jo = new JSONObject();
+			jo.put("Data", list);	
+			jo.put("userName", userName);
+			jo.put("projectName", projectName);
+			
+			result = jo.toString();
+				
+				
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+			return result;
+	}
 	
 }

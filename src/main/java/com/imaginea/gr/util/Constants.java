@@ -9,6 +9,6 @@ public interface Constants {
 	public static String GIT="git";
 	public static int FILE_DIRECTORY=2;
 	public static int FILE_NORMAL=3;
-	
+	public static String ORGIN="refs/remotes/origin/";
 	
 }

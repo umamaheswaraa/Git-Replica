@@ -3,18 +3,25 @@ package com.imaginea.gr.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
@@ -22,14 +29,19 @@ import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.dircache.DirCacheIterator;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revplot.PlotCommitList;
+import org.eclipse.jgit.revplot.PlotLane;
+import org.eclipse.jgit.revplot.PlotWalk;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.util.FS;
@@ -40,6 +52,7 @@ import org.springframework.util.StringUtils;
 import com.imaginea.gr.service.ContentService;
 import com.imaginea.gr.util.Constants;
 import com.imaginea.gr.util.FileUtil;
+import com.imaginea.gr.util.UtilitiesTest;
 
 public class ContentServiceImpl implements ContentService {
 
@@ -93,22 +106,18 @@ public class ContentServiceImpl implements ContentService {
 		
 	}
 	
-	public Map<String, Integer> getReposotoryContent(String url,String userName){
-		String retStr = null;
+	public Map<String, Integer> getReposotoryContent(String url,String userName,String projectName){
 		Map<String, Integer> retMap = new HashMap<String, Integer>();
 		try {
-			String projectName = getProjectName(url);
-			System.out.println("Project Name"+projectName);
-			System.out.println("url Name"+url);
-			System.out.println("User Name"+userName);
+			if(projectName==null || (projectName!=null && projectName.length()==0))
+			{
+				projectName = getProjectName(url);
+			}
 			File gitDir = this.cloneRepo(url, userName, projectName);
-			//File gitDir = new File("/users/umamaheswaraa/git/CRUD-App");
-			System.out.println("gitDir :"+gitDir.getPath());
 			Git git = Git.open(gitDir);
 			Repository repo= git.getRepository();
 			
-			ObjectId head = repo.resolve("HEAD");
-			Ref ref = repo.getRef("refs/heads/master");
+			ObjectId head = repo.resolve(Constants.HEAD);
 			RevWalk  walk = new RevWalk(repo);
 			DirCache cache = new DirCache(gitDir, FS.DETECTED);
 			
@@ -117,17 +126,10 @@ public class ContentServiceImpl implements ContentService {
 			treeWalk.addTree(new DirCacheIterator(cache));
 			while (treeWalk.next())
 			{
-				
-			    System.out.println("---------------------------");
-			    System.out.append("name: ").println(treeWalk.getNameString());
-			    System.out.append("path: ").println(treeWalk.getPathString());
-			    
 			    ObjectLoader loader = repo.open(treeWalk.getObjectId(0));
 			    
 			    retMap.put(treeWalk.getNameString(),loader.getType());
-			   
-			    System.out.append("directory: ").println(loader.getType());
-			 }
+			}
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -186,7 +188,7 @@ public class ContentServiceImpl implements ContentService {
 		        
 	}
 
-	private String getProjectName(String searchUrl){
+	public String getProjectName(String searchUrl){
 		String projectName=null;
 		try{			
 			if(searchUrl!=null && searchUrl.contains("."+Constants.GIT)){
@@ -445,7 +447,29 @@ public class ContentServiceImpl implements ContentService {
 		return retStr;
 	}
 	
-	
+	public String fetchUserInfo(String path, String userName){
+		Repository repo=null;
+		String name=null;
+		try{
+			 repo = this.getRepository(path, userName);
+			 Config config = repo.getConfig();
+             name = config.getString("user", null, "name");
+             String email = config.getString("user", null, "email");
+             if (name == null || email == null) {
+                     System.out.println("User identity is unknown!");
+             } else {
+                     System.out.println("User identity is " + name + " <" + email + ">");
+             }
+             
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			if(repo!=null){
+				repo.close();
+			}
+		}
+		return name;
+	}
 	
 	
 	public List<String> browseTree(String path,String subPath,String userName){
@@ -508,6 +532,142 @@ public class ContentServiceImpl implements ContentService {
 			repository.close();			
 		}
 		return content;
+	}
+	
+	public Map<String, List<String>> getListOfCommits(String path, String userName){
+		long time;
+		String strDate=null;
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		List<String> list = null;
+		try{
+			String projectName = this.getProjectName(path);
+			File gitDir = fileUtil.checkAndCreateDirectory(userName, projectName);
+			Git git = Git.open(gitDir);
+			Repository repo = git.getRepository();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMMM d,yyyy", Locale.ENGLISH);
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+			
+			Iterable<RevCommit> log = git.log().call();
+		    for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
+		        RevCommit rev = iterator.next();
+		        time = (long)rev.getCommitTime()*1000;
+		        strDate = sdf.format(time);
+		        if(map.containsKey(strDate)){
+		        	list = map.get(strDate);
+		        	list.add(rev.getFullMessage());
+		        }else{
+		        	list = new ArrayList<String>();
+		        	list.add(rev.getFullMessage());
+		        	map.put(strDate,list);
+		        }		        
+		    }
+		    
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return map;
+	}
+	
+	public List<String> getListOfRemotes(String path, String userName){
+		Repository repository=null;
+		List<String> list= new ArrayList<String>();
+		try{
+			Repository repo = this.getRepository(path, userName);
+			
+			Map<String, Ref> ref = repo.getAllRefs();
+			Set<Entry<String, Ref>> entry = ref.entrySet();
+			for(Entry<String, Ref> refentry : entry){
+				
+				if(refentry.getKey().contains(Constants.ORGIN)){
+					System.out.println("Key "+refentry.getKey());
+					list.add(refentry.getKey());	
+				}
+			}
+			list = getRemoteList(list);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}finally{
+			if(repository!=null){
+				repository.close();
+			}
+		}
+		return list;
+	}
+	
+	public List<String> getRemoteList(List<String> list){
+		List<String> retList=new ArrayList<String>();
+		try{
+			if(list!=null){
+				for(String str: list){
+					retList.add(str.substring(Constants.ORGIN.length()));					
+				}
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return retList;
+	}
+	
+	public List<String> getListOfTags(String path, String userName){
+		List<String> retList=new ArrayList<String>();
+		try{
+			Repository repo = this.getRepository(path, userName);
+			
+			Map<String, Ref> ref = repo.getTags();
+			Set<Entry<String, Ref>> entry = ref.entrySet();
+			for(Entry<String, Ref> refentry : entry){
+					System.out.println("Key "+refentry.getKey());
+					retList.add(refentry.getKey());	
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return retList;
+	}
+	
+	public List<String> getListOfContributors(String path, String userName){
+		List<String> retList=new ArrayList<String>();
+		try{
+			String projectName = this.getProjectName(path);
+			File gitDir = fileUtil.checkAndCreateDirectory(userName, projectName);
+			Git git = Git.open(gitDir);
+			Repository repo = git.getRepository();
+			SimpleDateFormat sdf = new SimpleDateFormat("MMMM d,yyyy", Locale.ENGLISH);
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+			
+			Iterable<RevCommit> log = git.log().all().call();
+		    for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
+		        RevCommit rev = iterator.next();
+		        System.out.println("rev auth email: "+rev.getAuthorIdent().getEmailAddress());
+		        System.out.println("rev auth name: "+rev.getAuthorIdent().getName());
+		        System.out.println("rev auth when: "+rev.getAuthorIdent().getWhen());
+		        System.out.println("rev auth offcet: "+rev.getAuthorIdent().getTimeZoneOffset());
+		        System.out.println("rev time : "+rev.getCommitTime());
+		        System.out.println("rev  name: "+rev.name());
+		    }
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return retList;
+	}
+	public void listRemoteRepo(String path, String userName){
+		try{
+			Collection<Ref> refs = Git.lsRemoteRepository()
+		            .setHeads(true)
+		            .setTags(true)
+		            .setRemote(path)
+		            .call();
+		        
+		        for(Ref ref : refs) {
+		            System.out.println("Ref: " + ref.getName());
+		            
+		        }
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 }
