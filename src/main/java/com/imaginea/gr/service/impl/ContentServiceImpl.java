@@ -38,7 +38,7 @@ import org.springframework.util.StringUtils;
 import com.imaginea.gr.exception.GitReplicaException;
 import com.imaginea.gr.service.ContentService;
 import com.imaginea.gr.util.Constants;
-import com.imaginea.gr.util.FileUtil;
+import com.imaginea.gr.util.Utility;
 
 /**
  * @author umamaheswaraa
@@ -48,35 +48,46 @@ public class ContentServiceImpl implements ContentService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContentServiceImpl.class);
 	
-	FileUtil fileUtil;
+	Utility utility;
 	
-	public FileUtil getFileUtil() {
-		return fileUtil;
+	public Utility getUtility() {
+		return utility;
 	}
 
-	public void setFileUtil(FileUtil fileUtil) {
-		this.fileUtil = fileUtil;
+	public void setUtility(Utility utility) {
+		this.utility = utility;
 	}
 
-	private File cloneRepo(String url,String userName,String projectName) throws GitReplicaException{
+	/**
+	 * This method will Clone the repository if the repository is not available
+	 * @param url
+	 * @param projectName
+	 * @return File
+ 	 * @throws GitReplicaException
+	 */
+	private File cloneRepo(String url,String projectName) throws GitReplicaException{
 		File tmpDir=null;
 		Repository repo = null;
 		try{
-			logger.info("Before Cloning Url: "+url+" projectName:"+projectName+" userName: "+userName);
-			tmpDir = fileUtil.checkAndCreateDirectory(userName, projectName);
+			logger.info("Before Cloning Url: "+url+" projectName:"+projectName);
+			tmpDir = utility.checkAndCreateDirectory(projectName);
 			try {
 				logger.info("File path: "+tmpDir.getPath());
 				
 				if (RepositoryCache.FileKey.isGitRepository(new File(tmpDir.getPath()), FS.DETECTED)) {
 						logger.info("Already Repository present :"+tmpDir.getPath());
 				} else {
-					Git git = Git.open(tmpDir);
-					repo = git.getRepository();
-					if(!hasAtLeastOneReference(repo)){
+					try{
+						Git git = Git.open(tmpDir);
+						repo = git.getRepository();
+						if(!hasAtLeastOneReference(repo)){
+							Git.cloneRepository().setURI(url).setDirectory(tmpDir).call();
+						} 
+					}catch (Exception e) {
+						//If the repository is not available then clone it.
 						Git.cloneRepository().setURI(url).setDirectory(tmpDir).call();
-					} 
+					}
 				}
-				
 				
 			} catch (InvalidRemoteException e) {
 				logger.error("Exception InvalidRemoteException :"+e.getMessage());
@@ -97,6 +108,11 @@ public class ContentServiceImpl implements ContentService {
 		return tmpDir;
 	}
 	
+	/**
+	 * This method checks if any references are present for the repository
+	 * @param repo
+	 * @return boolean
+	 */
 	private boolean hasAtLeastOneReference(Repository repo) {
 	    for (Ref ref : repo.getAllRefs().values()) {
 	      if (ref.getObjectId() == null)
@@ -106,20 +122,25 @@ public class ContentServiceImpl implements ContentService {
 	    return false;
 	  }
 
-	
-	public Map<String, Integer> getReposotoryContent(String url,String userName,String projectName)throws GitReplicaException{
+	/**
+	 * This method get the repository for the specified URL
+	 * @param url
+	 * @param projectName
+	 * @return Map<String, Integer>
+ 	 * @throws GitReplicaException
+	 */	
+	public Map<String, Integer> getReposotoryContent(String url,String projectName)throws GitReplicaException{
 		Map<String, Integer> retMap = new HashMap<String, Integer>();
 		logger.info("Inside getReposotoryContent method");
 		Repository repo=null;
 		try {
 			if(projectName==null || (projectName!=null && projectName.length()==0))
 			{
-				projectName = getProjectName(url);
+				projectName = utility.getProjectName(url);
 			}
-			File gitDir = this.cloneRepo(url, userName, projectName);
+			File gitDir = this.cloneRepo(url, projectName);
 			logger.info("gitDir :"+gitDir);
-			Git git = Git.open(gitDir);
-			repo = git.getRepository();
+			repo = this.getRepository(gitDir);
 			
 			ObjectId head = repo.resolve(Constants.HEAD);
 			RevWalk  walk = new RevWalk(repo);
@@ -146,32 +167,37 @@ public class ContentServiceImpl implements ContentService {
 		return retMap;
 	}
 	
-	public String getProjectName(String searchUrl) throws GitReplicaException{
-		String projectName=null;
+	/**
+	 * This method will the existing repository for the specified path
+	 * @param path
+	 * @return Repository
+ 	 * @throws GitReplicaException
+	 */
+	private Repository getRepository(File gitDir)throws GitReplicaException{
+		Repository repo=null;
 		try{			
-			if(searchUrl!=null && searchUrl.contains("."+Constants.GIT)){
-				StringTokenizer st = new StringTokenizer(searchUrl, "/");
-				while(st.hasMoreTokens()){
-					String token = st.nextToken();
-					if(token.contains("."))
-					{
-						projectName = token.substring(0, token.indexOf("."));
-					}
-				}
-				logger.info("projectName :"+projectName);
+			if(gitDir!=null){
+				Git git = Git.open(gitDir);
+				repo = git.getRepository();
 			}
 		}catch (Exception e) {
-			throw new GitReplicaException("Exception when getting project Name from URL"+e.getMessage());
+			logger.error("Exception when getting existing repository :"+e.getMessage());
+			throw new GitReplicaException("Exception when getting existing repository"+e.getMessage());
 		}
-		return projectName;
+		return repo;
 	}
 	
-	private Repository getRepository(String path,String userName)throws GitReplicaException{
+	/**
+	 * This method will the existing repository for the specified path
+	 * @param path
+	 * @return Repository
+ 	 * @throws GitReplicaException
+	 */
+	private Repository getRepository(String path)throws GitReplicaException{
 		Repository repo=null;
 		try{
-			String projectName = this.getProjectName(path);
-			File gitDir = fileUtil.checkAndCreateDirectory(userName, projectName);
-			logger.info("getRepository -- gitDir :"+gitDir.getPath());
+			String projectName = utility.getProjectName(path);
+			File gitDir = utility.checkAndCreateDirectory(projectName);
 			Git git = Git.open(gitDir);
 			repo = git.getRepository();
 		}catch (Exception e) {
@@ -181,6 +207,13 @@ public class ContentServiceImpl implements ContentService {
 		return repo;
 	}
 	
+	
+	
+	/**
+	 * Verify whether the specified path is file or folder
+	 * @param path
+	 * @return int
+	 */
 	private  int getFileModeForInt(String path) {
         if(path.contains(".")) {
                 return 3;
@@ -189,13 +222,20 @@ public class ContentServiceImpl implements ContentService {
         }
 	}
 	
-	
-	public Map<String, Integer> getSubFolderDetails(String path, String subPath,String userName) throws GitReplicaException
+	/**
+	 * This method will get the sub folder information 
+	 * @param path
+	 * @param subPath
+	 * @return Map<String,Integer>
+ 	 * @throws GitReplicaException
+	 */	
+	public Map<String, Integer> getSubFolderDetails(String path, String subPath) throws GitReplicaException
 	{
-		int length=subPath.length();
+		int length=0;
 		Map<String,Integer> map = new HashMap<String, Integer>();
 		try{
-			List<String> list = this.browseTree(path, subPath,userName);
+			length = subPath.length();
+			List<String> list = this.browseTree(path, subPath);
 			
 			for(String entry :list){
 				String subString = entry.substring(length);
@@ -211,6 +251,12 @@ public class ContentServiceImpl implements ContentService {
 		return map;
 	}
 	
+	/**
+	 * This method will get the sub path based for the specified path
+	 * @param prePath
+	 * @return String
+ 	 * @throws GitReplicaException
+	 */
 	public String getSubPath(String prePath) throws GitReplicaException
 	{
 		String retStr="";
@@ -228,12 +274,17 @@ public class ContentServiceImpl implements ContentService {
 		}
 		return retStr;
 	}
-	
-	public String fetchUserInfo(String path, String userName)throws GitReplicaException{
+	/**
+	 * This method fetch the user info from the configuration 
+	 * @param path
+	 * @return String
+ 	 * @throws GitReplicaException
+	 */
+	public String fetchUserInfo(String path)throws GitReplicaException{
 		Repository repo=null;
 		String name=null;
 		try{
-			 repo = this.getRepository(path, userName);
+			 repo = this.getRepository(path);
 			 Config config = repo.getConfig();
              name = config.getString("user", null, "name");
              String email = config.getString("user", null, "email");
@@ -254,12 +305,18 @@ public class ContentServiceImpl implements ContentService {
 		return name;
 	}
 	
-	
-	public List<String> browseTree(String path,String subPath,String userName) throws Exception{
+	/**
+	 * This method gets the list of child nodes and class files based on the specified path
+	 * @param path
+	 * @param subPath
+	 * @return List<String>
+ 	 * @throws Exception
+	 */
+	private List<String> browseTree(String path,String subPath) throws Exception{
 		List<String> list = new ArrayList<String>();
 		Repository repo=null;
 		try{
-			 repo = this.getRepository(path,userName);
+			repo = this.getRepository(path);
 			
 			//DirCache contains all files of the repository
             DirCache index = DirCache.read(repo);
@@ -277,7 +334,7 @@ public class ContentServiceImpl implements ContentService {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Excpetion when browse Tree :"+e.getMessage());
-			throw new GitReplicaException("Exception when getting browseTree from repository"+e.getMessage());
+			throw e;
 		}finally{
 			if(repo !=null){
 				repo.close();
@@ -286,11 +343,18 @@ public class ContentServiceImpl implements ContentService {
 		return list;
 	}
 	
-	public String getStringContent(String path, String subpath,String userName) throws GitReplicaException{
+	/**
+	 * This method gets the content of the file path
+	 * @param path
+	 * @param subPath
+	 * @return String
+ 	 * @throws GitReplicaException
+	 */
+	public String getStringContent(String path, String subpath) throws GitReplicaException{
 		Repository repository=null;
 		String content=null;
 		try{
-			repository = this.getRepository(path, null);
+			repository = this.getRepository(path);
 
             ObjectId revId = repository.resolve(Constants.HEAD);
             TreeWalk treeWalk = new TreeWalk(repository);
@@ -309,20 +373,66 @@ public class ContentServiceImpl implements ContentService {
 			logger.error("Exception while getting String content"+e.getMessage());
 			throw new GitReplicaException("Exception while getting String Content :"+e.getMessage());
 		}finally{
-			repository.close();			
+			if(repository!=null){
+				repository.close();
+			}			
 		}
 		return content;
 	}
 	
-	public Map<String, List<String>> getListOfCommits(String path, String userName)throws GitReplicaException{
+	
+	/**
+	 * This method Converts the string content into HTML string content
+	 * @param path
+	 * @param subPath
+	 * @return String
+ 	 * @throws GitReplicaException
+	 */
+	public String getHTMLContent(String path, String subpath) throws GitReplicaException{
+		Repository repository=null;
+		String content=null;
+		try{
+			repository = this.getRepository(path);
+
+            ObjectId revId = repository.resolve(Constants.HEAD);
+            TreeWalk treeWalk = new TreeWalk(repository);
+            treeWalk.setRecursive(true);
+            treeWalk.addTree(new RevWalk(repository).parseTree(revId));
+            treeWalk.setFilter(PathFilter.create(subpath));
+
+            while (treeWalk.next())
+            {
+                   ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
+                   byte[] bytes = loader.getBytes();
+                   content = new String(bytes);
+            }
+            	
+		}catch (Exception e) {
+			logger.error("Exception while getting String content"+e.getMessage());
+			throw new GitReplicaException("Exception while getting String Content :"+e.getMessage());
+		}finally{
+			if(repository!=null){
+				repository.close();
+			}			
+		}
+		return content;
+	}	
+	/**
+	 * This method gets the list of commits
+	 * @param path
+	 * @return Map<String,<List<String>>
+ 	 * @throws GitReplicaException
+	 */
+	public Map<String, List<String>> getListOfCommits(String path)throws GitReplicaException{
 		long time;
 		String strDate=null;
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		List<String> list = null;
 		try{
-			String projectName = this.getProjectName(path);
-			File gitDir = fileUtil.checkAndCreateDirectory(userName, projectName);
+			String projectName = utility.getProjectName(path);
+			File gitDir = utility.checkAndCreateDirectory(projectName);
 			Git git = Git.open(gitDir);
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("MMMM d,yyyy", Locale.ENGLISH);
 			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			
@@ -348,16 +458,21 @@ public class ContentServiceImpl implements ContentService {
 		return map;
 	}
 	
-	public List<String> getListOfRemotes(String path, String userName) throws GitReplicaException{
+	/**
+	 * This method gets the list of remote branches names
+	 * @param path
+	 * @return List<String>
+ 	 * @throws GitReplicaException
+	 */
+	public List<String> getListOfRemotes(String path) throws GitReplicaException{
 		Repository repository=null;
 		List<String> list= new ArrayList<String>();
 		try{
-			Repository repo = this.getRepository(path, userName);
+			Repository repo = this.getRepository(path);
 			
 			Map<String, Ref> ref = repo.getAllRefs();
 			Set<Entry<String, Ref>> entry = ref.entrySet();
 			for(Entry<String, Ref> refentry : entry){
-				
 				if(refentry.getKey().contains(Constants.ORGIN)){
 					logger.info("Key "+refentry.getKey());
 					list.add(refentry.getKey());	
@@ -377,6 +492,12 @@ public class ContentServiceImpl implements ContentService {
 		return list;
 	}
 	
+	/**
+	 * This method gets the list of remote branches under origin
+	 * @param list
+	 * @return List<String>
+ 	 * @throws GitReplicaException
+	 */
 	public List<String> getRemoteList(List<String> list)throws GitReplicaException{
 		List<String> retList=new ArrayList<String>();
 		try{
@@ -392,10 +513,16 @@ public class ContentServiceImpl implements ContentService {
 		return retList;
 	}
 	
-	public List<String> getListOfTags(String path, String userName)throws GitReplicaException{
+	/**
+	 * This method gets the list of release info
+	 * @param path
+	 * @return List<String>
+ 	 * @throws GitReplicaException
+	 */
+	public List<String> getListOfTags(String path)throws GitReplicaException{
 		List<String> retList=new ArrayList<String>();
 		try{
-			Repository repo = this.getRepository(path, userName);
+			Repository repo = this.getRepository(path);
 			
 			Map<String, Ref> ref = repo.getTags();
 			Set<Entry<String, Ref>> entry = ref.entrySet();
@@ -410,13 +537,19 @@ public class ContentServiceImpl implements ContentService {
 		return retList;
 	}
 	
-	public List<String> getListOfContributors(String path, String userName)throws GitReplicaException{
+	/**
+	 * This method gets the list of contributor info
+	 * @param path
+	 * @return List<String>
+ 	 * @throws GitReplicaException
+	 */
+	public List<String> getListOfContributors(String path)throws GitReplicaException{
 		List<String> retList=new ArrayList<String>();
 		try{
-			String projectName = this.getProjectName(path);
-			File gitDir = fileUtil.checkAndCreateDirectory(userName, projectName);
+			String projectName = utility.getProjectName(path);
+			File gitDir = utility.checkAndCreateDirectory(projectName);
 			Git git = Git.open(gitDir);
-			Repository repo = git.getRepository();
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("MMMM d,yyyy", Locale.ENGLISH);
 			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			
@@ -427,7 +560,9 @@ public class ContentServiceImpl implements ContentService {
 		        logger.info("rev auth name: "+rev.getAuthorIdent().getName());
 		        logger.info("rev auth when: "+rev.getAuthorIdent().getWhen());
 		        logger.info("rev auth offcet: "+rev.getAuthorIdent().getTimeZoneOffset());
-		        logger.info("rev time : "+rev.getCommitTime());
+		        logger.info("committer Email : "+rev.getCommitterIdent().getEmailAddress());
+		        logger.info("committer name : "+rev.getCommitterIdent().getName());
+		        logger.info("committer time : "+rev.getCommitterIdent().getWhen());
 		        logger.info("rev  name: "+rev.name());
 		    }
 			
@@ -436,6 +571,10 @@ public class ContentServiceImpl implements ContentService {
 			throw new GitReplicaException("Exception when getting list of contributors :"+e.getMessage());
 		}
 		return retList;
+	}
+	
+	public String getProjectName(String searchUrl)throws GitReplicaException{
+		return utility.getProjectName(searchUrl);
 	}
 	
 }

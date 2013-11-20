@@ -10,10 +10,10 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 <bean id="contentService" class="com.imaginea.gr.service.impl.ContentServiceImpl">
-	<property name="fileUtil" ref="fileUtil"></property>
+	<property name="utility" ref="utility"></property>
 </bean>
 
 <bean id="restClient" class="com.imaginea.gr.util.RestClient"></bean>
-<bean id="fileUtil" class="com.imaginea.gr.util.FileUtil"></bean>
+<bean id="utility" class="com.imaginea.gr.util.Utility"></bean>
 <bean id="userEntity" class="com.imaginea.gr.entity.UserEntity"></bean>
 </beans>

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ import com.imaginea.gr.service.ContentService;
 @RequestMapping(value="content")
 public class ContentController {
 
+	private static final Logger logger = LoggerFactory.getLogger(ContentController.class);
+	
 	@Autowired
 	ContentService contentService; 
 	
@@ -27,26 +31,35 @@ public class ContentController {
 		String result=null;
 		String userName=null;
 		Map<String, Integer> map =null;
+		String status="success";
+		String projectName=null;
 		try{
-			userName = contentService.fetchUserInfo(searchVal, null);
-			String projectName = contentService.getProjectName(searchVal);
+			projectName = contentService.getProjectName(searchVal);
+			logger.info("projectName: "+projectName);
 			if(projectName!=null){
-				map = contentService.getReposotoryContent(searchVal,userName,projectName);
-			}	
+				map = contentService.getReposotoryContent(searchVal,projectName);
+			}
+			userName = contentService.fetchUserInfo(searchVal);
+		}catch (Exception e) {
+			status = "failed";
+		}
+			if(map==null || (map!=null && map.size()==0)){
+				status = "failed";
+			}
 			
 			Map<String , String> objectMap = new HashMap<String, String>();
 			objectMap.put("prePath", "");
 			objectMap.put("userName", userName);
 			objectMap.put("projectName", projectName);
+			objectMap.put("status",status );
+
 			JSONObject jo = new JSONObject();
 			jo.put("Data", map);	
 			jo.put("otherData", objectMap);
 			
 			result = jo.toString();
  
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
+		
 		return result;
 		
 	}
@@ -63,14 +76,13 @@ public class ContentController {
 			String userName =dataMap.get("userName");
 			String path =dataMap.get("path");
 			String projectName = dataMap.get("projectName");
-					
-			System.out.println("prePath "+prePath);
-			System.out.println("subpath :"+subPath);
 			
-			Map<String, Integer> map = contentService.getSubFolderDetails(path, prePath+subPath+"/",userName);
+			logger.info("projectName: "+projectName+" subPath :"+subPath);
+			
+			Map<String, Integer> map = contentService.getSubFolderDetails(path, prePath+subPath+"/");
 			Map<String , String> objectMap = new HashMap<String, String>();
 			prePath = prePath+subPath+"/";
-			System.out.println("prePath : "+prePath);
+			logger.info("prepath: "+prePath);
 			objectMap.put("prePath",prePath);
 			objectMap.put("userName", userName);
 			objectMap.put("projectName", projectName);
@@ -102,7 +114,7 @@ public class ContentController {
 			
 			String destPath = contentService.getSubPath(prePath);
 			if(userName==null || (userName!=null && userName.length()==0)){
-				userName = contentService.fetchUserInfo(path, null);
+				userName = contentService.fetchUserInfo(path);
 			}
 			if(projectName==null || (projectName!=null && projectName.length()==0))
 			{
@@ -111,9 +123,9 @@ public class ContentController {
 			
 			if(destPath!=null && destPath.length()>0)
 			{
-				map = contentService.getSubFolderDetails(path, destPath, userName);
+				map = contentService.getSubFolderDetails(path, destPath);
 			}else{
-				map = contentService.getReposotoryContent(path, userName, projectName);
+				map = contentService.getReposotoryContent(path, projectName);
 			}
 			 
 			Map<String , String> objectMap = new HashMap<String, String>();
@@ -150,7 +162,8 @@ public class ContentController {
 			String path =dataMap.get("path");
 			projectName = dataMap.get("projectName");
 			
-			String content = contentService.getStringContent(path, prePath+subPath,userName);
+			String content = contentService.getStringContent(path, prePath+subPath);
+			
 			JSONObject jo = new JSONObject();
 			jo.put("Data", content);	
 			if(prePath!=null && prePath.length()>0){
@@ -183,7 +196,7 @@ public class ContentController {
 			userName =dataMap.get("userName");
 			String path =dataMap.get("path");
 			projectName = dataMap.get("projectName");
-			Map<String, List<String>> map = contentService.getListOfCommits(path, userName);
+			Map<String, List<String>> map = contentService.getListOfCommits(path);
 			JSONObject jo = new JSONObject();
 			jo.put("Data", map);	
 			jo.put("userName", userName);
@@ -211,7 +224,7 @@ public class ContentController {
 			userName =dataMap.get("userName");
 			String path =dataMap.get("path");
 			projectName = dataMap.get("projectName");
-			List<String> list = contentService.getListOfRemotes(path, userName);
+			List<String> list = contentService.getListOfRemotes(path);
 			JSONObject jo = new JSONObject();
 			jo.put("Data", list);	
 			jo.put("userName", userName);
@@ -239,7 +252,7 @@ public class ContentController {
 			userName =dataMap.get("userName");
 			String path =dataMap.get("path");
 			projectName = dataMap.get("projectName");
-			List<String> list = contentService.getListOfTags(path, userName);
+			List<String> list = contentService.getListOfTags(path);
 			JSONObject jo = new JSONObject();
 			jo.put("Data", list);	
 			jo.put("userName", userName);

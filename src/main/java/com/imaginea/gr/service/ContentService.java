@@ -10,14 +10,14 @@ import com.imaginea.gr.exception.GitReplicaException;
  *
  */
 public interface ContentService {
-	public Map<String, Integer> getReposotoryContent(String url,String userName,String projectName)throws GitReplicaException;
-	public Map<String, Integer> getSubFolderDetails(String path, String subPath,String userName)throws GitReplicaException;
+	public Map<String, Integer> getReposotoryContent(String url,String projectName)throws GitReplicaException;
+	public Map<String, Integer> getSubFolderDetails(String path, String subPath)throws GitReplicaException;
 	public String getSubPath(String prePath) throws GitReplicaException;
-	public String getStringContent(String path, String subpath, String userName)throws GitReplicaException;
-	public String fetchUserInfo(String path, String userName)throws GitReplicaException;
+	public String getStringContent(String path, String subpath)throws GitReplicaException;
+	public String fetchUserInfo(String path)throws GitReplicaException;
 	public String getProjectName(String searchUrl)throws GitReplicaException;
-	public Map<String, List<String>> getListOfCommits(String path, String userName)throws GitReplicaException;
-	public List<String> getListOfRemotes(String path, String userName)throws GitReplicaException;
-	public List<String> getListOfTags(String path, String userName)throws GitReplicaException;
-	public List<String> getListOfContributors(String path, String userName)throws GitReplicaException;
+	public Map<String, List<String>> getListOfCommits(String path)throws GitReplicaException;
+	public List<String> getListOfRemotes(String path)throws GitReplicaException;
+	public List<String> getListOfTags(String path)throws GitReplicaException;
+	public List<String> getListOfContributors(String path)throws GitReplicaException;
 }

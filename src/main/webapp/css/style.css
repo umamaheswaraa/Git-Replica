@@ -9,7 +9,7 @@ h1,h2,h3,h4,h5,h6,img{
 	color:#333;
 }
 body{
-	font-family:vendenta;
+	font: 13px/1.4 Helvetica,arial,freesans,clean,sans-serif;
 	line-height:1;
 }
 table{
@@ -25,6 +25,7 @@ a{text-decoration: none;}
 	overflow: hidden;
 }
 .flt-left{float:left;}
+.flt-right{float:right;}
 .wrapper{
 	min-width: 1000px;
 	max-width:1200px;
@@ -132,15 +133,118 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f8c7', end
 }
 .mc-title{
 	font-size: 18px;
-	color: #333333;
 	font-weight: bold;
-	margin:25px 10px 0px 10px;
+	margin:10px;
+	color:#4183C4;
 }
+.file-info textarea {
+	border: medium none;
+    resize: none;
+    width: 100%;
+    overflow: auto;
+    color:rgba(0, 0, 0, 0.6);
+}
+
+.file-info-wrapper{
+	
+}
+.final-path{
+	color: #000000;
+}
+
+.border-bottom{
+	border-bottom: 1px solid #E5E5E5;
+	padding: 15px 0;
+}
+
+.cmt-container{
+    float: left;
+    width: 920px;
+}
+.border-margin{
+    position: relative;
+}
+
+.btn-dsp{
+	padding:5px;
+	margin:5px;
+	
+}
+
+.tag-container{
+	 float: left;
+    width: 920px;	
+}
+
+.tag-nodata{
+	 background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 3px;
+    box-shadow: 0 0 8px #EEEEEE inset;
+    padding: 30px;
+    position: relative;
+    text-align: center;
+}
+
+.release-tag {
+     font-size: 18px;
+    font-weight: normal;
+    line-height: 1.444;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.tag-data{
+	 background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 3px;
+    box-shadow: 0 0 8px #EEEEEE inset;
+    padding: 30px;
+    position: relative;
+    text-align: center;
+    width:80%;
+}
+
+.logo-action{
+	display:inline-block;
+}
+.logo{
+	 font-size: 32px;
+	padding:5px;
+	margin:5px;	 
+}
+.file-count {
+    float: left;
+    padding: 20px 0;
+    text-align: center;
+    width: 5%;
+    color:rgba(0, 0, 0, 0.6);
+}
+
+.file-cont {
+	 border-left: 1px solid #EFEFEF;
+    float: left;
+    padding: 10px;
+    width: 90%;
+}
+
+.file-container{
+	background: none repeat scroll 0 0 #E7ECEE;
+    border: 1px solid #D2D9DD;
+    border-radius: 4px;
+    color: #7B878C;
+    font-size: 14px;
+    margin: 10px 0;
+    padding: 9px 8px 0;
+}
+
+
 .mc-title1{
 	font-size: 14px;
 	color: #4585E6;
 	font-weight: bold;
-	margin:25px 10px 0px 10px;
+	padding:10px;
+	border-bottom:1px solid #B7C7CF;
 }
 table{
 	width: 100%;
@@ -282,20 +386,103 @@ thead tr:last-child{border-right:none; }
 	font-size: 12px;
 }
 .div-size{
-	height: 35px;
 	border:1px solid #ccc;
+	border-color: #B7C7CF #B7C7CF #D8E6EC;
 	margin: 0x 0px 0px;
-	padding: 0px 5px;
+	padding: 10px;
 	color:gray;
-	background-color:#FFFFFF;
+	background: none repeat 0 0 #E6F1F6;
+}
+
+.div-size img {
+	width:16px;
+	height:16px;	
+}
+
+.data-wrapper div.div-size {
+	border:none;
+	border-bottom:1px solid #B7C7CF;
+}
+
+.data-wrapper .data-cont {
+	
+}
+
+.data-thead {
+	border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 0px 0px;
+    float: left;
+    width: 954px;
+}
+
+.data-thead div {
+	color: #808080 !important;
+    float: left;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    width: 22%;
+}
+
+.data-thead div a {
+	color:grey !important;
+	font-weight:bold;
+}
+
+.data-wrapper .data-cont div {
+	background-color: #f8f8f8;
+}
+
+.commit-group{
+ 	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-color: -moz-use-text-color #C5D5DD #C5D5DD;
+    border-image: none;
+    border-style: none none solid;
+    border-width: medium 1px 1px;
+    list-style-type: none;
+    margin: 0 0 15px;
+}
+.commit-group-item:nth-child(2n+1) {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+.commit-group-item:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.commit-group-item:first-child {
+    border-top: medium none;
+}
+
+.commit-title{
+	color: #333333;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 1px 0;
+}
+.commit-area{
+	color: #888888;
+    font-size: 12px;
+}
+
+.brn-master{
+	font-size: 16px;
+    margin: 0;
 }
 .div-size-com{
-	height: 30px;
-	border:1px solid #ccc;
-	margin: 0x 0px 0px;
-	padding: 0px 5px;
-	color:gray;
-	background-color:#FFFFFF;
+	background: none repeat scroll 0 0 #E6F1F6;
+    border: 1px solid #C5D5DD;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: #3A505B;
+    font-size: 13px;
+    margin: 15px 0 0;
+    padding: 5px 8px;
+    text-shadow: 0 1px #FFFFFF;
 }
 .div-size-nofill{
 	height: 10px;

@@ -49,12 +49,12 @@
 			}
 			 if(prepath.length==0){
 				 
-				 htmlStr = '<div><h1 class="mc-title" style="font-size: 16px; color: #4585E6; font-weight: bold;">'+userName+'/'+projectName+'</h1></div><div style="width:80%; background-color:#fff;border:1px solid #bbb;margin-bottom: 0px;"><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a id="folder" href="javascript:void(0);" id="tgt-link-commit" projectName="'+projectName+'" userName="'+userName+'">commits</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-branch">branch</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-tags">releases</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><h3 class="label-2">contrubutor</h3></div></div><div style="width:100%;"><div style="display: inline-block;width:40%;height:0px;border-bottom: 10px solid #1f085e;margin:0;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #f15501;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #b07219;"></div></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: #4585E6; font-weight: bold;">'+projectName+'/'+prepath+'<h1></div>' ;
+				 htmlStr = '<div class="border-bottom"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div><div style="width:80%; background-color:#fff;border:1px solid #bbb;margin-bottom: 0px;"><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" id="tgt-link-commit" projectName="'+projectName+'" userName="'+userName+'">commits</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-branch">branch</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-tags">releases</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-tags">contrubutor</a></div></div><div style="width:100%;"><div style="display: inline-block;width:40%;height:0px;border-bottom: 10px solid #1f085e;margin:0;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #f15501;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #b07219;"></div></div><div><h1 class="mc-title">'+projectName+'/'+prepath+'<h1></div>' ;
 			 }else{
-				 htmlStr = '<div><h1 class="mc-title" style="font-size: 16px; color: #4585E6; font-weight: bold;">'+userName+'/'+projectName+'</h1></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: #4585E6; font-weight: bold;">'+projectName+'/'+prepath+'<h1></div>' ;
+				 htmlStr = '<div class="border-bottom"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div><div class="mc-title"><span>'+projectName+'</span><span> / </span><span class="final-path">'+prepath+'</span></div>' ;
 			 }			 	
 				
-			$("#mc-table-results").html(htmlStr+"<div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='div-size' style='background-color:#B6DAFF;'>Added Comments</div><div class='mc-title1'>"+userName+"</div><div>"+htmlStr_Prefolder+"</div><div>"+htmlStr_folder+"</div><div>"+htmlStr_files+"</div></div>");
+			$("#mc-table-results").html(htmlStr+"<div class='data-wrapper' style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='div-size' style='background-color:#B6DAFF;'>Added Comments</div><div class='mc-title1'>"+userName+"</div><div>"+htmlStr_Prefolder+"</div><div>"+htmlStr_folder+"</div><div>"+htmlStr_files+"</div></div>");
 				
 		}
 		
@@ -76,7 +76,7 @@
 					$.each(lines, function(lineno, line){
 						count++;
 					  
-					  htmlStr_files = htmlStr_files+'<div style="display: inline-block;width:5%;">'+count+'</div><div style="display: inline-block;"><textarea style="width:1000px;border:none;font-size: 16px;" rows="1" cols="1">'+line+'</textarea></div></br>';
+					  htmlStr_files = htmlStr_files+'<div class="file-info-wrapper"><div class="file-count">'+count+'</div><div class="file-cont"><textarea>'+line+'</textarea></div></div>';
 					});
 						
 				}else if(key =='userName'){
@@ -85,9 +85,9 @@
 					projectName = myObj[key];
 				}
 			}
-			htmlStr = '<div><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: blue; font-weight: bold; margin:">'+projectName+' / '+prepath+' <h1></div>' ;
+			htmlStr = '<div class="border-bottom"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div><div class="mc-title"><span>'+projectName+'</span><span> / </span><span class="final-path">'+prepath+' </span></div>' ;
 			
-			$("#mc-table-results").html(htmlStr+"<div style='width:80%;border:1px solid #bbb;'><div class='mc-title'>User Name</div><div class='div-size'>commits</div></div><div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='div-size'>file</div><div>"+htmlStr_files+"</div></div>");
+			$("#mc-table-results").html(htmlStr+"<div style='width:80%;border:1px solid #bbb;'><div class='mc-title'>User Name</div><div class='div-size'>commits</div></div><div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='file-container'><img style='vertical-align: center;' class='margin' src='images/text-image-icon.png'>file</div><div class='file-info'>"+htmlStr_files+"</div></div>");
 		}
 		
 		function displayCommits (myObj){
@@ -104,17 +104,17 @@
 				 var list = data[key];				 
 				 $.each(list, function( index, value ) {
 					  //alert( index + ": " + value );
-					  htmlStr_files = htmlStr_files+'<div style="font-weight: bold;">'+value+'</div><div>'+userName+' authored  days ago </div><br>';
+					  htmlStr_files = htmlStr_files+'<div class="commit-title">'+value+'</div><div class="commit-area">'+userName+' authored  days ago </div>';
 				});
 				
-				htmlStr_folder = '<div><div class="div-size-com" style="background-color:#B6DAFF; font-weight: bold;" >'+key+'</div>'+htmlStr_files+' <div class="div-size-nofill"></div></div>';
-				htmlStr_Prefolder = htmlStr_Prefolder+htmlStr_folder;
+				htmlStr_folder = '<div class="commit-group-item js-navigation-item js-details-container"><div class="div-size-com">'+key+'</div>'+htmlStr_files+'</div>';
+				htmlStr_Prefolder = '<div class="commit-group">'+htmlStr_Prefolder+htmlStr_folder+'</div>';
 			} 
 			 
-			htmlStr = '<div><h1 class="mc-title" style="font-size: 16px; color: #4585E6; font-weight: bold;">'+userName+'/'+projectName+'</h1></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: #4585E6; font-weight: bold;">'+projectName+'/ Commits <h1></div>' ;
+			htmlStr = '<div class="border-bottom border-margin"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div>' ;
 			 			 	
 				
-			$("#mc-table-results").html(htmlStr+"<div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div>"+htmlStr_Prefolder+"</div></div>");
+			$("#mc-table-results").html(htmlStr+"<div class='cmt-container'><div class='mc-title'><span>"+projectName+"</span><span> / </span><span> Commits </span></div><div>"+htmlStr_Prefolder+"</div></div>");
 		
 		}
 		
@@ -134,9 +134,33 @@
 				  }				  
 			});
 			 
-			htmlStr = '<div><h1 class="mc-title" style="font-size: 16px; color: #4585E6; font-weight: bold;">'+userName+'/'+projectName+'</h1></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: black; font-weight: bold;"> Branches <h1></div>' ;
+			htmlStr = '<div class="border-bottom"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div><div><h1 style="font-size: 16px; color: black; font-weight: bold;"> Branches <h1></div>' ;
 				
 			$("#mc-table-results").html(htmlStr+"<div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div>"+htmlStr_folder+"</div><div style='border:1px solid;'>"+htmlStr_files+"</div></div>");
+		
+		}
+		
+		function displayTags (myObj){
+			var htmlStr_folder="";
+			var htmlStr_files="";
+			var htmlStr_Prefolder="";
+			var projectName=myObj["projectName"];
+			 var list = myObj["Data"];
+			 var userName = myObj["userName"];
+			 var tag ="Tags";
+			 if(list ==""){
+				 tag="";
+				 htmlStr_files = '<div class="tag-nodata">No Release Tags available</div>';
+			 }else{
+				 $.each(list, function( index, value ) {				 
+					  htmlStr_files = htmlStr_files+'<div class="tag-data">'+value+'</div>';  
+				});	 
+			 }
+			 
+			 
+			htmlStr = '<div class="border-bottom"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div>' ;
+				
+			$("#mc-table-results").html(htmlStr+"<div><div class='mc-title'><span>Releaes </span><span> / </span><span> "+tag+" </span></div><div>"+htmlStr_files+"</div></div>");
 		
 		}
 		
@@ -160,7 +184,7 @@
 				async:false,
 				success:function(result){
 					var myObj = JSON.parse(result);
-					displayRemotes(myObj);
+					displayTags(myObj);
 				},
 				failure:function(){
 					
@@ -346,7 +370,13 @@
 			var htmlStr_Prefolder="";
 			var userName="";
 			var projectName="";
+			var status="";
 			var searchVal = $("#search").val();
+			if(searchVal=="" || searchVal.length==0)
+			{
+				alert("Please provide the Search value");
+				return false;
+			}
 			var url = "http://localhost:8080/Git-Replica/content/fetchInfo.htm";
 			$.ajax({
 				url: url+'?searchVal='+searchVal,
@@ -359,23 +389,26 @@
 						 var otherData = myObj["otherData"];
 						 var count=0;
 						 var prepath='';
-						
 						 for(var key in otherData)
-							{
-								if(key=='prePath' && otherData[key].length>0)
-							 	{
-									prepath = otherData[key];
-									htmlStr_Prefolder= htmlStr_Prefolder+'<div class="div-size"><img style="vertical-align: center;" class="margin" src="images/Pictures-icon.png"><a id="folder" href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'"  prePath="'+prepath+'" class="tgt-link-pre">&nbsp;'+prepath+'</a></div>';
-								}
-								if(key=='userName' && otherData[key].length>0)
-							 	{
-									userName = otherData[key];									
-								}
-								if(key=='projectName' && otherData[key].length>0)
-							 	{
-									projectName = otherData[key];									
-								}	
+						 {
+							if(key=='prePath' && otherData[key].length>0)
+						 	{
+								prepath = otherData[key];
+								htmlStr_Prefolder= htmlStr_Prefolder+'<div class="div-size"><img style="vertical-align: center;" class="margin" src="images/Pictures-icon.png"><a id="folder" href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'"  prePath="'+prepath+'" class="tgt-link-pre">&nbsp;'+prepath+'</a></div>';
 							}
+							if(key=='userName' && otherData[key].length>0)
+						 	{
+								userName = otherData[key];									
+							}
+							if(key=='projectName' && otherData[key].length>0)
+						 	{
+								projectName = otherData[key];									
+							}
+							if(key=='status')
+						 	{
+								status = otherData[key];									
+							}
+						 }
 						 for(var key in data)
 						{
 							count++;
@@ -393,10 +426,17 @@
 				}
 				
 			});
-			htmlStr = '<div><h1 class="mc-title" style="font-size: 16px; color: #4585E6; font-weight: bold;">'+userName+'/'+projectName+'</h1></div><div style="width:80%; background-color:#fff;border:1px solid #bbb;margin-bottom: 0px;"><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-commit">commits</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-branch">branch</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-tags">releases</a></div><div style="display: inline-block;width:20%; height:15px; margin:1em;"><h3 class="label-2">contrubutor</h3></div></div><div style="width:100%;"><div style="display: inline-block;width:40%;height:0px;border-bottom: 10px solid #1f085e;margin:0;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #f15501;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #b07219;"></div></div><div><h1 style="width:80%;height:35px; font-size: 16px; color: #4585E6; font-weight: bold;">'+projectName+'<h1></div>' ;
-			
-			$("#mc-table-results").html(htmlStr+"<div style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='div-size' style='background-color:#B6DAFF;'>Added Comments</div><div class='mc-title1'>"+userName+"</div><div>"+htmlStr_folder+"</div><div>"+htmlStr_files+"</div></div");
-			
+			if(status=="failed")
+			{
+				htmlStr = '<div class="border-bottom"><h1 class="mc-title">No Projects available for the specified URL</h1></div>' ;
+				
+				$("#mc-table-results").html(htmlStr);
+				
+			}else{
+				htmlStr = '<div class="border-bottom"><h1 class="mc-title">'+userName+'/'+projectName+'</h1></div><div class="data-thead"><div class="data-head"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-commit">commits</a></div><div class="data-head"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-branch">branch</a></div><div class="data-head"><a href="javascript:void(0);" projectName="'+projectName+'" userName="'+userName+'" id="tgt-link-tags">releases</a></div><div class="data-head"><a>contrubutor</a></div></div><div style="width:100%;"><div style="display: inline-block;width:40%;height:0px;border-bottom: 10px solid #1f085e;margin:0;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #f15501;"></div><div style="display: inline-block;width:20%;height:0px;border-bottom: 10px solid #b07219;"></div></div><div><h1 class="mc-title">'+projectName+'<h1></div>' ;
+				
+				$("#mc-table-results").html(htmlStr+"<div class='data-wrapper' style='width:80%;height:100%;overflow:auto; border:1px solid #bbb;'><div class='div-size'>Added Comments</div><div class='mc-title1'>"+userName+"</div><div class='data-cont'><div>"+htmlStr_folder+"</div><div>"+htmlStr_files+"</div></div></div");
+			}
 		});
 		
 		
@@ -409,11 +449,14 @@
 	<div class="main-cont">
 		<div class="wrapper">
 			<div class="mc-rounded"> 
-				<div class="mc-header hidden">
-								<h1 class="label-2">Git Replica</h1>
-								<input id="search" style="width:240px;" name="words" class="tgf-textbox flt-left" type="text" placeholder="Search or type a command">
+				<div class="mc-header border-bottom">
+							<div class="logo-action">
+								<a class="logo">GitReplica</a>
+								<input id="search" style="width:240px;" name="words" class="tgf-textbox" type="text" placeholder="Search or type a command">
 								<input class="go-btn custom-btn-1" type="submit" value="Go">
-							<div style="padding:8px;right:5px;top:5px;float:right;position:relative;border:1px solid #ddd;">
+							</div>
+								
+							<div class="logo-action flt-right btn-dsp">
 								<input type="submit" value="Login" class="custom-btn-2">
 							</div>
 				</div>
