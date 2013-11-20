@@ -141,6 +141,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f8c7', end
 	border: medium none;
     resize: none;
     width: 100%;
+    height:11px;
     overflow: auto;
     color:rgba(0, 0, 0, 0.6);
 }
@@ -215,7 +216,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f8c7', end
 }
 .file-count {
     float: left;
-    padding: 20px 0;
+    padding: 10px 0;
     text-align: center;
     width: 5%;
     color:rgba(0, 0, 0, 0.6);
@@ -514,3 +515,4 @@ thead tr:last-child{border-right:none; }
 .margL10{
 	margin-left: 10px;
 }
+

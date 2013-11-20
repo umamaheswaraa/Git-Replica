@@ -380,43 +380,6 @@ public class ContentServiceImpl implements ContentService {
 		return content;
 	}
 	
-	
-	/**
-	 * This method Converts the string content into HTML string content
-	 * @param path
-	 * @param subPath
-	 * @return String
- 	 * @throws GitReplicaException
-	 */
-	public String getHTMLContent(String path, String subpath) throws GitReplicaException{
-		Repository repository=null;
-		String content=null;
-		try{
-			repository = this.getRepository(path);
-
-            ObjectId revId = repository.resolve(Constants.HEAD);
-            TreeWalk treeWalk = new TreeWalk(repository);
-            treeWalk.setRecursive(true);
-            treeWalk.addTree(new RevWalk(repository).parseTree(revId));
-            treeWalk.setFilter(PathFilter.create(subpath));
-
-            while (treeWalk.next())
-            {
-                   ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
-                   byte[] bytes = loader.getBytes();
-                   content = new String(bytes);
-            }
-            	
-		}catch (Exception e) {
-			logger.error("Exception while getting String content"+e.getMessage());
-			throw new GitReplicaException("Exception while getting String Content :"+e.getMessage());
-		}finally{
-			if(repository!=null){
-				repository.close();
-			}			
-		}
-		return content;
-	}	
 	/**
 	 * This method gets the list of commits
 	 * @param path

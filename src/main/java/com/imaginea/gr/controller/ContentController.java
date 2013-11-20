@@ -163,7 +163,6 @@ public class ContentController {
 			projectName = dataMap.get("projectName");
 			
 			String content = contentService.getStringContent(path, prePath+subPath);
-			
 			JSONObject jo = new JSONObject();
 			jo.put("Data", content);	
 			if(prePath!=null && prePath.length()>0){
