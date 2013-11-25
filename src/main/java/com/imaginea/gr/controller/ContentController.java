@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.imaginea.gr.service.ContentService;
+import com.imaginea.gr.util.Constants;
 
 @Controller
 @RequestMapping(value="content")
@@ -41,10 +42,10 @@ public class ContentController {
 			}
 			userName = contentService.fetchUserInfo(searchVal);
 		}catch (Exception e) {
-			status = "failed";
+			status = Constants.FAILED;
 		}
 			if(map==null || (map!=null && map.size()==0)){
-				status = "failed";
+				status = Constants.FAILED;
 			}
 			
 			Map<String , String> objectMap = new HashMap<String, String>();

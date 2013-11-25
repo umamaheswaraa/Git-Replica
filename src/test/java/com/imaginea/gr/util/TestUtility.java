@@ -14,7 +14,7 @@ import com.imaginea.gr.exception.GitReplicaException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/applicationContext.xml"})
-public class UtilitiesTest {
+public class TestUtility {
 
 	@Autowired
 	Utility utility;

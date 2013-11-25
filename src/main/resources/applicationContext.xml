@@ -9,11 +9,74 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
+<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:gitreplica.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true"/>
+		<property name="searchSystemEnvironment" value="true"/>
+</bean>
+
+<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
 <bean id="contentService" class="com.imaginea.gr.service.impl.ContentServiceImpl">
 	<property name="utility" ref="utility"></property>
 </bean>
+<aop:aspectj-autoproxy proxy-target-class="true" />
+<tx:annotation-driven transaction-manager="transactionManager"/>
 
-<bean id="restClient" class="com.imaginea.gr.util.RestClient"></bean>
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<property name="entityManagerFactory" ref="entityManagerFactory" />
+</bean>
+
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<property name="dataSource" ref="dataSource" />
+	<property name="jpaVendorAdapter">
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="ORACLE" />
+				<property name="showSql" value="${hibernate.showSql}" />
+				<property name="generateDdl" value="${hibernate.generateDdl}" />
+		</bean>
+	</property>
+	<property name="jpaPropertyMap">
+		<map>
+			<entry key="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+			<entry key="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
+	        <entry key="hibernate.connection.url" value="${gitr.jdbcurl}" />
+	        <entry key="hibernate.connection.username" value="${gitr.dbuser}" />
+	        <entry key="hibernate.connection.password" value="${gitr.dbpass}" />
+	        <entry key="hibernate.c3p0.min_size" value="${hibernate.c3p0.min_size}"/>
+	        <entry key="hibernate.c3p0.max_size" value="${hibernate.c3p0.max_size}"/>
+	        <entry key="hibernate.c3p0.timeout" value="${hibernate.c3p0.timeout}"/>   
+	        <entry key="hibernate.dialect" value="${hibernate.dialect}"/> 
+	        <entry key="hibernate.c3p0.max_statements" value="${hibernate.c3p0.max_statements}" />
+	        <entry key="hibernate.c3p0.breakAfterAcquireFailure" value="${hibernate.c3p0.breakAfterAcquireFailure}" />
+	        <entry key="hibernate.c3p0.acquireRetryAttempts" value="${hibernate.c3p0.acquireRetryAttempts}" />
+	        <entry key="hibernate.c3p0.acquireRetryDelay" value="${hibernate.c3p0.acquireRetryDelay}"/>
+		</map>
+	</property>
+	<property name="jpaDialect">
+      	<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+    </property>
+    <property name="persistenceUnitName" value="punit" />
+</bean>
+
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${gitr.driverClassName}" />
+		<property name="url" value="${gitr.jdbcurl}" />
+		<property name="username" value="${gitr.dbuser}" />
+		<property name="password" value="${gitr.dbpass}" />
+</bean>
+<bean id="loginService" class="com.imaginea.gr.service.impl.LoginServiceImpl">
+	<property name="genericDao" ref="genericDao" />
+</bean>
+
+<bean id="genericDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="genericDaoImpl" />
+</bean>
+<bean id="genericDaoImpl" class="com.imaginea.gr.dao.GenericJpaDao"></bean>
 <bean id="utility" class="com.imaginea.gr.util.Utility"></bean>
-<bean id="userEntity" class="com.imaginea.gr.entity.UserEntity"></bean>
+<bean id="user" class="com.imaginea.gr.entity.User"></bean>
 </beans>

@@ -12,5 +12,8 @@ public interface Constants {
 	public static String ORGIN="refs/remotes/origin/";
 	public static String TMP_FOLDER="tmp/";
 	public static String git_FOLDER="/git/";
-	
+	public static String DUPLICATE = "Duplicate";
+	public static String SUCCESS = "Success";
+	public static String FAILED = "Failed";
+	public static String DUPLICATE_MSG = "User is already Exist";
 }

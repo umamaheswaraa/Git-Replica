@@ -9,6 +9,15 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		var localUserName="";
+		if(sessionStorage.username){
+			localUserName = sessionStorage.username;
+			$("#localUser").html(localUserName);
+			$("#login-action").hide();
+		}else{
+			$("#logout").hide();
+			$("#login-action").show();
+		}
 		
 		function displayFolderContent(myObj){
 			var htmlStr_folder="";
@@ -163,6 +172,14 @@
 			$("#mc-table-results").html(htmlStr+"<div><div class='mc-title'><span>Releaes </span><span> / </span><span> "+tag+" </span></div><div>"+htmlStr_files+"</div></div>");
 		
 		}
+		
+		$("#logout").live('click',function(){
+			$("#logout").hide();
+			$("#login-action").show();
+			sessionStorage.username="";
+			var localUserName="";
+			$("#localUser").html(localUserName);
+		});
 		
 		$("#tgt-link-tags").live('click', function(){
 			
@@ -439,6 +456,10 @@
 			}
 		});
 		
+		$("#login-action").live('click', function(){
+			window.location.href = "/Git-Replica/login.html";
+			  
+		});
 		
 	});
 
@@ -457,7 +478,10 @@
 							</div>
 								
 							<div class="logo-action flt-right btn-dsp">
-								<input type="submit" value="Login" class="custom-btn-2">
+							<span id="localUser" class="label-4"></span>
+							<input type="button" id="login-action" class="custom-btn-2" value="SIGN IN">
+							<img class="margin" id="logout" title="logout" src="images/logout1.png">
+							
 							</div>
 				</div>
 				<div id="mc-table-results" style="min-height:400px;">

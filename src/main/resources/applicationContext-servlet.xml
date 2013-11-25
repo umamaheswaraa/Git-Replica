@@ -13,5 +13,6 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 <context:annotation-config />
 <mvc:annotation-driven />
 <bean class="com.imaginea.gr.controller.ContentController"></bean>
+<bean class="com.imaginea.gr.controller.LoginController"></bean>
 
 </beans>

@@ -1,6 +1,8 @@
 package com.imaginea.gr.util;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
@@ -63,5 +65,10 @@ public class Utility {
 			throw new GitReplicaException("Exception when getting project Name from URL"+e.getMessage());
 		}
 		return projectName;
+	}
+	
+	public static Date getCurrentTime(){
+		Calendar today = Calendar.getInstance();
+		return today.getTime();
 	}
 }

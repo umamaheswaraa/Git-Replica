@@ -172,11 +172,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f8c7', end
 	
 }
 
-.tag-container{
-	 float: left;
-    width: 920px;	
-}
-
 .tag-nodata{
 	 background-color: #FAFAFA;
     border: 1px solid #DDDDDD;
@@ -185,14 +180,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0f8c7', end
     padding: 30px;
     position: relative;
     text-align: center;
-}
-
-.release-tag {
-     font-size: 18px;
-    font-weight: normal;
-    line-height: 1.444;
-    margin-bottom: 0;
-    margin-top: 0;
 }
 
 .tag-data{
@@ -310,7 +297,9 @@ thead tr:last-child{border-right:none; }
 	font-size:14px;color:#333;font-weight: bold;margin:10px 10px 10px 10px;
 }
 .label-4{
-	margin:15px;
+	 font-weight: bold;
+    line-height: 16px;
+    white-space: nowrap;
 }
 #table-results{
 	width:70%;
@@ -325,12 +314,12 @@ thead tr:last-child{border-right:none; }
 	color: #333;
 	margin:10px 10px 0px 10px;
 }
-.label-3{
-	font-size:14px;color:#333;font-weight: bold;margin:10px 10px 10px 10px;
+.label-9{
+	font-size:15px;
+	color: #666;
+	font-weight: bold;
 }
-.label-4{
-	margin:10px 10px 10px 10px;
-}
+
 .message-label{
 	display: inline-block;
 	padding:10px;
@@ -497,6 +486,7 @@ thead tr:last-child{border-right:none; }
 	vertical-align: center;
 	margin: 15x 10px 10px;
 }
+
 .tgt-link{
 	color: #0066cc;
 	cursor:pointer;
@@ -512,7 +502,44 @@ thead tr:last-child{border-right:none; }
 	cursor:pointer;
 	font-size:12px;
 }
-.margL10{
-	margin-left: 10px;
+
+.attrMap-textbox{
+	border:1px solid #ccc;
+	box-shadow: inset 1px 1px 2px #e8e8e8;
+	width: 180px;
+	height: 30px;
+	margin:5px 5px 5px 0px;
+	padding: 0px 5px 0px 10px;
+	font-size: 13px;
+}
+
+.btn-bar{
+	margin:5px 10px 10px 10px;
+	overflow: hidden;
+}
+
+.mapRow{
+	background-color:#fff !important;
+	border:none !important;
+}
+
+.mapRow td{
+	border:none !important;
+}
+
+select {
+	height: 25px;
+    padding: -1 5px 0 10px;
+    margin:5px 5px 5px 0px;
+    border-radius:4px;
+    box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+    color:#888;
+    appearance:none;
+    cursor:pointer;
+    width:190px;
+    border: 1px solid #CCCCCC;
+    border:1px solid #ccc;
+	box-shadow: inset 1px 1px 2px #e8e8e8;
+	font-size: 13px;
 }
 

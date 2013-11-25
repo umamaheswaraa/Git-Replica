@@ -16,7 +16,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
 		<org.logback.version>0.9.28</org.logback.version>
 		<org.slf4j.version>1.7.5</org.slf4j.version>
+		<jgit-version>3.1.0.201310021548-r</jgit-version>
+		<http-client-version>3.0.1</http-client-version>
   		<junit.version>4.10</junit.version>
+  		<mockito.version>1.9.5</mockito.version>
+  		<jackson-version>1.9.7</jackson-version>
+  		<json-version>20131018</json-version>
   </properties>
   
   <dependencies>
@@ -127,14 +132,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>3.1.0.201310021548-r</version>
+      <version>${jgit-version}</version>
     </dependency>
     
     <!-- Apache Commons HttpClient -->
 	<dependency>
 		<groupId>commons-httpclient</groupId>
 		<artifactId>commons-httpclient</artifactId>
-		<version>3.0.1</version>
+		<version>${http-client-version}</version>
 	</dependency>
     
 	<!-- junit -->
@@ -145,20 +150,25 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<scope>test</scope>
 	</dependency>
 	
-	<!-- JSON Mapper -->
+	<dependency>
+		<groupId>org.mockito</groupId>
+		<artifactId>mockito-all</artifactId>
+		<version>${mockito.version}</version>
+	</dependency>
+	
+	<!-- Jackson  -->
 	<dependency>
         <groupId>org.codehaus.jackson</groupId>  
         <artifactId>jackson-jaxrs</artifactId>  
-        <version>1.9.7</version>  
+        <version>${jackson-version}</version>  
      </dependency>
-     
+
+	<!-- JSON Mapper -->
      <dependency>
 		<groupId>org.json</groupId>
 		<artifactId>json</artifactId>
-		<version>20131018</version>
+		<version>${json-version}</version>
 	</dependency>
-
-            
       
   </dependencies>
 </project>

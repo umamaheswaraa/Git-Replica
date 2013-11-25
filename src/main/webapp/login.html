@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title></title>
+<script type="text/javascript" src="js/jquery-1.7.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		var html_select="";
+		var option_val="";
+		function displayRoles(myObj){
+			 var data = myObj["data"];
+			 for(var key in data)
+			{
+				 option_val = option_val+"<option value=" + key + ">" + key + "</option>"
+			}
+			 html_select = '<td><div class="flt-left"><h3 class="label-9">Role</h3><select required="required" id="role"><option selected>SELECT OPTION</option>'+option_val+'</select></div></td>'
+			 $("#role-results").html(html_select);
+			 $("#login-new").hide();
+			 $("#login").hide();	
+			 $("#save-new").show();
+		}
+		
+		$("#login-new").live('click', function(){
+			var url = "http://localhost:8080/Git-Replica/login/getRoles.htm";
+			$.ajax({
+				url:url,
+				type:"Get",
+				async:false,
+				success:function(result){
+					var myObj = JSON.parse(result);
+					displayRoles(myObj);
+				},
+				failure:function(){
+					
+				}
+			});
+			
+		});
+		
+		$("#login-cancel").die().live('click',function(){
+			
+			window.location.href="/Git-Replica/index.html";			
+		});
+		
+		$("#save-new").live('click', function(){
+			
+			var username = $("#username").val();
+			var password = $("#password").val();
+			var role = $("#role").val();
+			
+			if(username == ""){
+				alert("please enter the username ");
+				return;
+			}
+			if(password == ""){
+				alert("please enter the password ");
+				return;
+			}
+			if(role == "SELECT OPTION"){
+				alert("please select the role ");
+				return;
+			}
+			var json_value={};
+		    var new_Json = jQuery.extend(true,{},json_value);
+		    new_Json["username"] = username;
+			new_Json["password"] = password;
+			new_Json["role"] = role;
+			var userData ='userData='+JSON.stringify(new_Json);
+			var url = "http://localhost:8080/Git-Replica/login/addUser.htm";
+			$.ajax({
+				url:url,
+				type:"POST",
+				async:false,
+				data:userData,
+				success:function(result){
+					var myObj = JSON.parse(result);
+					var result = myObj["result"];
+					 var username = myObj["username"];
+					 var errorMsg = myObj["errorMsg"];
+					 if(result=="success"){
+						 sessionStorage.username=username;
+						 window.location.href = "/Git-Replica/index.html";	 
+					 }else{
+						 if(result=="Failed"){
+							 alert("Login failed :"+errorMsg); 
+						 }else{
+							 alert(result);	 
+						 }
+					 }
+					
+				},
+				failure:function(){
+					
+				}
+			}); 
+			
+		});
+		
+		$("#login").live('click', function(){
+			
+			var username = $("#username").val();
+			var password = $("#password").val();
+			
+			if(username == ""){
+				alert("please enter the username ");
+				return;
+			}
+			if(password == ""){
+				alert("please enter the password ");
+				return;
+			}
+			
+			var json_value={};
+		    var new_Json = jQuery.extend(true,{},json_value);
+		    new_Json["username"] = username;
+			new_Json["password"] = password;
+			var userData ='userData='+JSON.stringify(new_Json);
+			var url = "http://localhost:8080/Git-Replica/login/verifyUser.htm";
+			$.ajax({
+				url:url,
+				type:"Get",
+				async:false,
+				data:userData,
+				success:function(result){
+					var myObj = JSON.parse(result);
+					var result = myObj["result"];
+					 var username = myObj["username"];
+					 var errorMsg = myObj["errorMsg"];
+					 if(result=="success"){
+						 sessionStorage.username=username;
+						 window.location.href = "/Git-Replica/index.html";	 
+					 }else{
+						 alert("Login failed :"+errorMsg); 
+					 }
+					
+				},
+				failure:function(){
+					
+				}
+			}); 
+			
+		});
+		
+	});
+	
+</script>
+</head>
+<body>
+<div class="main-cont">
+		<div class="wrapper">
+			<div class="mc-rounded"> 
+				<div class="mc-header border-bottom">
+						<table class="am-table">
+							<tr class="mapRow">
+								<td>
+									<div class="flt-left"><h3 class="label-9">Username</h3>
+										<input  type="text" id="username" name="username" required="required" class="attrMap-textbox" maxlength="20" placeholder="user name">
+									</div>
+								</td>
+							</tr>
+							<tr style="background-color:#fff !important;" class="mapRow">
+								<td>
+									<div class="flt-left"><h3 class="label-9">Password</h3>
+										<input type="password" name="password" id="password" class="attrMap-textbox" maxlength="20" placeholder="password" required="required" autocomplete="off">
+									</div>
+								</td>
+							</tr>
+							<tr style="background-color:#fff !important;" class="mapRow" id="role-results">
+							
+							</tr>
+							</table>		
+							
+							<div class="btn-bar">
+								<div class="accept-div flt-left">
+									<input type="button" id="login" class="accept-btn custom-btn-2" value="Login">
+									<input style="display:none" type="button" id="save-new" class="accept-btn custom-btn-2" value="Save">
+									<input type="button" id="login-cancel" class="custom-btn-1" value="Cancel">
+									<input type="button" id="login-new" title="New user can create account" class="custom-btn-2" value="Create New Account">
+									<a href="#"><img class="accept-sign" src="<%=request.getContextPath()%>/themes/images/accept.png"></a>
+								</div>
+								<div class="save-img" style="display:none;" class=""><span class="popupload"></span><label style="color:gray;">Login in progress...</label></div>
+							</div>							
+				</div>
+				<div id="mc-table-results" style="min-height:400px;">
+						
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
