@@ -13,7 +13,7 @@ public interface Dao<E extends Entity,K extends Serializable> {
 
 	public <E extends Entity> E find(Class<E> inEntityClass, K inPkey) throws DataAccessException;
 	
-	public <E extends Entity, obj> E getEntity(Class<E> inElementClass, String queryName, Hashtable<String, obj> criteria) throws DataAccessException;
+	public <E extends Entity, obj extends Object> E getEntity(Class<E> inElementClass, String queryName, Hashtable<String, obj> criteria) throws DataAccessException;
 	
 	public void delete(Entity inEntity)	throws DataAccessException;
 	

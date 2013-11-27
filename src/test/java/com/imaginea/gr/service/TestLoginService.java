@@ -50,7 +50,7 @@ public class TestLoginService {
 		loginService.addUser(user);
 	}
 
-	@Test(expected=GitReplicaException.class)
+	@Test(expected=Exception.class)
 	public void saveNullPassqword() throws GitReplicaException{
 		User user = new User();
 		
@@ -60,7 +60,7 @@ public class TestLoginService {
 		
 		loginService.addUser(user);
 	}
-	@Test(expected=GitReplicaException.class)
+	@Test(expected=Exception.class)
 	public void saveNullRole() throws GitReplicaException{
 		User user = new User();
 		
@@ -126,7 +126,7 @@ public class TestLoginService {
 		Assert.assertNotNull(user1);
 	}
 	
-	@Test
+	@Test(expected=Exception.class)
 	public void getUserbyUser() throws GitReplicaException{
 		User user = new User();
 		user.setUserName("umamaheswar");

@@ -96,7 +96,6 @@ public class LoginServiceImpl implements LoginService {
 		}catch(javax.persistence.NoResultException ne){
 			logger.info("No records found for this user :"+userName);
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Exception while fetching user info"+e.getMessage());
 			throw new GitReplicaException("Exception while fetching User info :"+e.getMessage());
 		}

@@ -25,7 +25,7 @@ public class ContentController {
 	private static final Logger logger = LoggerFactory.getLogger(ContentController.class);
 	
 	@Autowired
-	ContentService contentService; 
+	private ContentService contentService; 
 	
 	@RequestMapping(value="fetchInfo",method=RequestMethod.GET)
 	public @ResponseBody String getContentInfo(@RequestParam("searchVal") String searchVal){
@@ -55,7 +55,7 @@ public class ContentController {
 			objectMap.put("status",status );
 
 			JSONObject jo = new JSONObject();
-			jo.put("Data", map);	
+			jo.put("data", map);	
 			jo.put("otherData", objectMap);
 			
 			result = jo.toString();
@@ -89,7 +89,7 @@ public class ContentController {
 			objectMap.put("projectName", projectName);
 			
 			JSONObject jo = new JSONObject();
-			jo.put("Data", map);	
+			jo.put("data", map);	
 			jo.put("otherData", objectMap);
 			result = jo.toString();
 		}catch (Exception e) {
@@ -131,13 +131,13 @@ public class ContentController {
 			 
 			Map<String , String> objectMap = new HashMap<String, String>();
 			prePath = destPath;
-			System.out.println("prePath : "+prePath);
+			logger.info("prePath : "+prePath);
 			objectMap.put("prePath",prePath);
 			objectMap.put("userName", userName);
 			objectMap.put("projectName", projectName);
 			
 			JSONObject jo = new JSONObject();
-			jo.put("Data", map);	
+			jo.put("data", map);	
 			jo.put("otherData", objectMap);
 			result = jo.toString();
 			
@@ -198,7 +198,7 @@ public class ContentController {
 			projectName = dataMap.get("projectName");
 			Map<String, List<String>> map = contentService.getListOfCommits(path);
 			JSONObject jo = new JSONObject();
-			jo.put("Data", map);	
+			jo.put("data", map);	
 			jo.put("userName", userName);
 			jo.put("projectName", projectName);
 			
@@ -226,7 +226,7 @@ public class ContentController {
 			projectName = dataMap.get("projectName");
 			List<String> list = contentService.getListOfRemotes(path);
 			JSONObject jo = new JSONObject();
-			jo.put("Data", list);	
+			jo.put("data", list);	
 			jo.put("userName", userName);
 			jo.put("projectName", projectName);
 			
@@ -254,7 +254,7 @@ public class ContentController {
 			projectName = dataMap.get("projectName");
 			List<String> list = contentService.getListOfTags(path);
 			JSONObject jo = new JSONObject();
-			jo.put("Data", list);	
+			jo.put("data", list);	
 			jo.put("userName", userName);
 			jo.put("projectName", projectName);
 			

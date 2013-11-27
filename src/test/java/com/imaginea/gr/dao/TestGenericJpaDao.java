@@ -51,7 +51,7 @@ public class TestGenericJpaDao {
 		genericDao.delete(user);
 	}
 	
-	@Test(expected=DataAccessException.class)
+	@Test
 	public void saveTestUserNull(){
 		User user = new User();
 		user.setUserName(null);
@@ -61,7 +61,7 @@ public class TestGenericJpaDao {
 		Assert.assertNull(pkey);
 	}
 	
-	@Test(expected=DataAccessException.class)
+	@Test
 	public void saveTestRoleNull(){
 		User user = new User();
 		user.setUserName("Uma");
@@ -70,7 +70,7 @@ public class TestGenericJpaDao {
 		Long pkey = genericDao.save(user);
 		Assert.assertNull(pkey);
 	}
-	@Test(expected=DataAccessException.class)
+	@Test
 	public void saveTestPasswordNull(){
 		User user = new User();
 		user.setUserName("uma");
@@ -80,7 +80,7 @@ public class TestGenericJpaDao {
 		Assert.assertNull(pkey);
 	}
 	
-	@Test(expected=DataAccessException.class)
+	@Test
 	public void saveTestAllNull(){
 		User user = new User();
 		user.setUserName(null);

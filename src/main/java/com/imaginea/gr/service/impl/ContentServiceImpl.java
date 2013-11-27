@@ -48,7 +48,7 @@ public class ContentServiceImpl implements ContentService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContentServiceImpl.class);
 	
-	Utility utility;
+	private Utility utility;
 	
 	public Utility getUtility() {
 		return utility;
@@ -73,35 +73,31 @@ public class ContentServiceImpl implements ContentService {
 			tmpDir = utility.checkAndCreateDirectory(projectName);
 			try {
 				logger.info("File path: "+tmpDir.getPath());
-				
-				if (RepositoryCache.FileKey.isGitRepository(new File(tmpDir.getPath()), FS.DETECTED)) {
-						logger.info("Already Repository present :"+tmpDir.getPath());
-				} else {
 					try{
 						Git git = Git.open(tmpDir);
 						repo = git.getRepository();
 						if(!hasAtLeastOneReference(repo)){
 							Git.cloneRepository().setURI(url).setDirectory(tmpDir).call();
-						} 
+						}else{
+							logger.info("Already Repository present :"+tmpDir.getPath());
+						}
 					}catch (Exception e) {
 						//If the repository is not available then clone it.
 						Git.cloneRepository().setURI(url).setDirectory(tmpDir).call();
 					}
-				}
-				
+					
 			} catch (InvalidRemoteException e) {
-				logger.error("Exception InvalidRemoteException :"+e.getMessage());
-				throw new GitReplicaException("Exception while Cloning the Repository :"+e.getMessage());
+				logger.error("InvalidRemoteException while cloning the repository:"+e.getMessage());
+				throw new GitReplicaException("InvalidRemoteException while Cloning the Repository :"+e.getMessage());
 			} catch (TransportException e) {
-				logger.error("Exception InvalidRemoteException :"+e.getMessage());
-				throw new GitReplicaException("Exception while Cloning the Repository :"+e.getMessage());
+				logger.error("TransportException  :"+e.getMessage());
+				throw new GitReplicaException("TransportException  while Cloning the Repository :"+e.getMessage());
 			} catch (GitAPIException e) {
 				logger.error("Exception GitAPIException :"+e.getMessage());
 				throw new GitReplicaException("Exception while Cloning the Repository :"+e.getMessage());
 			}
 			
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Exception when clonig the repo :"+e.getMessage());
 			throw new GitReplicaException("Exception while Cloning the Repository :"+e.getMessage());
 		}
@@ -115,8 +111,9 @@ public class ContentServiceImpl implements ContentService {
 	 */
 	private boolean hasAtLeastOneReference(Repository repo) {
 	    for (Ref ref : repo.getAllRefs().values()) {
-	      if (ref.getObjectId() == null)
+	      if (ref.getObjectId() == null){
 	        continue;
+	      }
 	      return true;
 	    }
 	    return false;
@@ -312,7 +309,7 @@ public class ContentServiceImpl implements ContentService {
 	 * @return List<String>
  	 * @throws Exception
 	 */
-	private List<String> browseTree(String path,String subPath) throws Exception{
+	private List<String> browseTree(String path,String subPath) throws GitReplicaException{
 		List<String> list = new ArrayList<String>();
 		Repository repo=null;
 		try{
@@ -332,9 +329,8 @@ public class ContentServiceImpl implements ContentService {
             }
 			
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Excpetion when browse Tree :"+e.getMessage());
-			throw e;
+			throw new GitReplicaException("Exception in browseTree method :"+e.getMessage());
 		}finally{
 			if(repo !=null){
 				repo.close();
@@ -444,7 +440,6 @@ public class ContentServiceImpl implements ContentService {
 			list = getRemoteList(list);
 			
 		}catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Exception when getting list of remotes :"+e.getMessage());
 			throw new GitReplicaException("Exception when getting list of remotes :"+e.getMessage());
 		}finally{

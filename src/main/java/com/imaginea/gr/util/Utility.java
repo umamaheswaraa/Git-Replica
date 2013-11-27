@@ -49,19 +49,20 @@ public class Utility {
 	 */
 	public String getProjectName(String searchUrl) throws GitReplicaException{
 		String projectName=null;
-		try{			
+		try{		
 			if(searchUrl!=null && searchUrl.contains("."+Constants.GIT)){
 				StringTokenizer st = new StringTokenizer(searchUrl, "/");
 				while(st.hasMoreTokens()){
 					String token = st.nextToken();
 					if(token.contains("."))
 					{
-						projectName = token.substring(0, token.indexOf("."));
+						projectName = token.substring(0, token.indexOf('.'));
 					}
 				}
 				logger.info("projectName :"+projectName);
 			}
 		}catch (Exception e) {
+			logger.info("Exception occured in getProjectName method "+e.getMessage());
 			throw new GitReplicaException("Exception when getting project Name from URL"+e.getMessage());
 		}
 		return projectName;

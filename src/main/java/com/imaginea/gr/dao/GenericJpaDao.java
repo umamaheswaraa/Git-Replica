@@ -22,7 +22,8 @@ import com.imaginea.gr.util.Utility;
  */
 public class GenericJpaDao<E extends Entity, K extends Serializable> implements Dao<E,K>{
 
-	EntityManager entityManager; 
+	private EntityManager entityManager;
+	
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
@@ -87,7 +88,7 @@ public class GenericJpaDao<E extends Entity, K extends Serializable> implements 
 	 * @return Entity
 	 * @throws DataAccessException
 	 */
-	public <E extends Entity, obj> E getEntity(Class<E> inElementClass, String queryName, Hashtable<String, obj> criteria) throws DataAccessException{
+	public <E extends Entity, obj extends Object> E getEntity(Class<E> inElementClass, String queryName, Hashtable<String, obj> criteria) throws DataAccessException{
 		String key;
 		Object result;
 		Query query = entityManager.createNamedQuery(queryName);

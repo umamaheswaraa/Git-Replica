@@ -25,7 +25,7 @@
 			var htmlStr_Prefolder="";
 			var userName="";
 			var projectName="";
-			 var data = myObj["Data"];
+			 var data = myObj["data"];
 			 var otherData = myObj["otherData"];
 			 var count=0;
 			 var prepath='';
@@ -104,7 +104,7 @@
 			var htmlStr_files="";
 			var htmlStr_Prefolder="";
 			var projectName=myObj["projectName"];
-			 var data = myObj["Data"];
+			 var data = myObj["data"];
 			 var userName = myObj["userName"];
 			 
 			 for(var key in data)
@@ -132,7 +132,7 @@
 			var htmlStr_files="";
 			var htmlStr_Prefolder="";
 			var projectName=myObj["projectName"];
-			 var list = myObj["Data"];
+			 var list = myObj["data"];
 			 var userName = myObj["userName"];
 			 
 			 $.each(list, function( index, value ) {				 
@@ -154,7 +154,7 @@
 			var htmlStr_files="";
 			var htmlStr_Prefolder="";
 			var projectName=myObj["projectName"];
-			 var list = myObj["Data"];
+			 var list = myObj["data"];
 			 var userName = myObj["userName"];
 			 var tag ="Tags";
 			 if(list ==""){
@@ -402,7 +402,7 @@
 				success:function(result){
 					 if(result!=null){
 						 var myObj = JSON.parse(result);
-						 var data = myObj["Data"];
+						 var data = myObj["data"];
 						 var otherData = myObj["otherData"];
 						 var count=0;
 						 var prepath='';

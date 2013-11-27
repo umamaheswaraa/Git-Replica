@@ -36,6 +36,7 @@ public class LoginController {
 			jo.put("data", map);
 			result = jo.toString();
 		}catch (Exception e) {
+			result=Constants.FAILED;
 		}
 		return result;
 	}
