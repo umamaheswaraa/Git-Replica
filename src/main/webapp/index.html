@@ -187,7 +187,7 @@
 		    var userName = $(this).attr("userName");
 		    var projectName = $(this).attr("projectName");
 		    
-		    var url = "http://localhost:8080/Git-Replica/content/getListOfTags.htm";
+		    var url = "content/getListOfTags.htm";
 		    var json_value={};
 		    var new_Json = jQuery.extend(true,{},json_value);
 		    new_Json["path"] = searchVal;
@@ -216,7 +216,7 @@
 		    var userName = $(this).attr("userName");
 		    var projectName = $(this).attr("projectName");
 		    
-		    var url = "http://localhost:8080/Git-Replica/content/getListOfRemotes.htm";
+		    var url = "content/getListOfRemotes.htm";
 		    var json_value={};
 		    var new_Json = jQuery.extend(true,{},json_value);
 		    new_Json["path"] = searchVal;
@@ -245,7 +245,7 @@
 		    var userName = $(this).attr("userName");
 		    var projectName = $(this).attr("projectName");
 		    
-		    var url = "http://localhost:8080/Git-Replica/content/getListOfCommits.htm";
+		    var url = "content/getListOfCommits.htm";
 		    
 		    var json_value={};
 		    var new_Json = jQuery.extend(true,{},json_value);
@@ -279,7 +279,7 @@
 		    var userName = $(this).attr("userName");
 		    var projectName = $(this).attr("projectName");
 		    //alert('id: ' + id + ' value:' + value + 'subPath '+ subPath+' prePath '+prePath);
-		    var url = "http://localhost:8080/Git-Replica/content/getNextSubFolderInfo.htm";
+		    var url = "content/getNextSubFolderInfo.htm";
 		    var json_value = {};
 			var new_Json = jQuery.extend(true, {}, json_value);
 			new_Json["path"] = searchVal;
@@ -318,7 +318,7 @@
 		    var userName = $(this).attr("userName");
 		    var projectName = $(this).attr("projectName");
 		    //alert( ' value:' + value + 'subPath '+ subPath+' prePath '+prePath+'ProjectName :'+projectName+'Username :'+userName);
-		    var url = "http://localhost:8080/Git-Replica/content/getBlobContent.htm";
+		    var url = "content/getBlobContent.htm";
 		    var json_value = {};
 			var new_Json = jQuery.extend(true, {}, json_value);
 			new_Json["path"] = searchVal;
@@ -353,7 +353,7 @@
 		    var projectName = $(this).attr("projectName");
 		    
 		    //alert('id: ' + id + ' value:' + value + ' prePath '+prePath);
-		    var url = "http://localhost:8080/Git-Replica/content/getPreSubFolderInfo.htm";
+		    var url = "content/getPreSubFolderInfo.htm";
 		    var json_value = {};
 			var new_Json = jQuery.extend(true, {}, json_value);
 			new_Json["path"] = searchVal;
@@ -394,7 +394,7 @@
 				alert("Please provide the Search value");
 				return false;
 			}
-			var url = "http://localhost:8080/Git-Replica/content/fetchInfo.htm";
+			var url = "content/fetchInfo.htm";
 			$.ajax({
 				url: url+'?searchVal='+searchVal,
 				type:'GET',
