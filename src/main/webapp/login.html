@@ -48,12 +48,12 @@
 		
 		$("#save-new").live('click', function(){
 			
-			var username = $("#username").val();
+			var userName = $("#userName").val();
 			var password = $("#password").val();
 			var role = $("#role").val();
 			
-			if(username == ""){
-				alert("please enter the username ");
+			if(userName == ""){
+				alert("please enter the userName ");
 				return;
 			}
 			if(password == ""){
@@ -66,7 +66,7 @@
 			}
 			var json_value={};
 		    var new_Json = jQuery.extend(true,{},json_value);
-		    new_Json["username"] = username;
+		    new_Json["userName"] = userName;
 			new_Json["password"] = password;
 			new_Json["role"] = role;
 			var userData ='userData='+JSON.stringify(new_Json);
@@ -79,10 +79,10 @@
 				success:function(result){
 					var myObj = JSON.parse(result);
 					var result = myObj["result"];
-					 var username = myObj["username"];
+					 var userName = myObj["userName"];
 					 var errorMsg = myObj["errorMsg"];
 					 if(result=="success"){
-						 sessionStorage.username=username;
+						 sessionStorage.userName=userName;
 						 window.location.href = "/Git-Replica/index.html";	 
 					 }else{
 						 if(result=="Failed"){
@@ -102,11 +102,11 @@
 		
 		$("#login").live('click', function(){
 			
-			var username = $("#username").val();
+			var userName = $("#userName").val();
 			var password = $("#password").val();
 			
-			if(username == ""){
-				alert("please enter the username ");
+			if(userName == ""){
+				alert("please enter the userName ");
 				return;
 			}
 			if(password == ""){
@@ -116,7 +116,7 @@
 			
 			var json_value={};
 		    var new_Json = jQuery.extend(true,{},json_value);
-		    new_Json["username"] = username;
+		    new_Json["userName"] = userName;
 			new_Json["password"] = password;
 			var userData ='userData='+JSON.stringify(new_Json);
 			var url = "login/verifyUser.htm";
@@ -128,10 +128,10 @@
 				success:function(result){
 					var myObj = JSON.parse(result);
 					var result = myObj["result"];
-					 var username = myObj["username"];
+					 var userName = myObj["userName"];
 					 var errorMsg = myObj["errorMsg"];
 					 if(result=="success"){
-						 sessionStorage.username=username;
+						 sessionStorage.userName=userName;
 						 window.location.href = "/Git-Replica/index.html";	 
 					 }else{
 						 alert("Login failed :"+errorMsg); 
@@ -158,7 +158,7 @@
 							<tr class="mapRow">
 								<td>
 									<div class="flt-left"><h3 class="label-9">Username</h3>
-										<input  type="text" id="username" name="username" required="required" class="attrMap-textbox" maxlength="20" placeholder="user name">
+										<input  type="text" id="userName" name="userName" required="required" class="attrMap-textbox" maxlength="20" placeholder="user name">
 									</div>
 								</td>
 							</tr>

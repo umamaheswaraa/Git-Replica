@@ -4,28 +4,28 @@ import java.util.Date;
 
 public interface Entity {
 
-	public Long getPkey();
+    Long getPkey();
 
-	public void setPkey(Long pkey);
-	
-	public Boolean getIsDeleted();
+    void setPkey(Long pkey);
     
-    public void setIsDeleted(Boolean deleted);
+    Boolean getIsDeleted();
     
-	public String getCreatedBy();
+    void setIsDeleted(Boolean deleted);
+    
+    String getCreatedBy();
 
-	public void setCreatedBy(String creator);
-	
-	public Date getCreatedOn();
+    void setCreatedBy(String creator);
+    
+    Date getCreatedOn();
 
-	public void setCreatedOn(Date created);
+    void setCreatedOn(Date created);
 
-	public String getChangedBy();
+    String getChangedBy();
 
-	public void setChangedBy(String changer);
+    void setChangedBy(String changer);
 
-	public Date getChangedOn();
+    Date getChangedOn();
 
-	public void setChangedOn(Date changed);    
+    void setChangedOn(Date changed);    
 
 }

@@ -7,8 +7,8 @@ import com.imaginea.gr.exception.GitReplicaException;
 
 public interface LoginService {
 
-	public String addUser(User user) throws GitReplicaException;
-	public User getUser(User user) throws GitReplicaException;
-	public User getUser(String userName) throws GitReplicaException;
-	public Map<String, String> getRoles()throws GitReplicaException;
+    String addUser(User user) throws GitReplicaException;
+    User getUser(User user) throws GitReplicaException;
+    User getUser(String userName) throws GitReplicaException;
+    Map<String, String> getRoles()throws GitReplicaException;
 }

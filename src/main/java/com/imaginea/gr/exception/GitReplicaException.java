@@ -6,19 +6,27 @@ package com.imaginea.gr.exception;
  */
 public class GitReplicaException extends Exception {
 
-	private static final long serialVersionUID = 5650750549195849364L;
+    private static final long serialVersionUID = 5650750549195849364L;
 
-	private String message;
+    private String message;
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	public GitReplicaException(String message){
-		this.message=message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public GitReplicaException(String message){
+        this.message=message;
+    }
+    
+    public GitReplicaException(Exception e){
+        this.message=e.getMessage();
+    }
+    
+    public GitReplicaException(String message, Exception e){
+        this.message=message+e.getMessage();
+    }
 }
