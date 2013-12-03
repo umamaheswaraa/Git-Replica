@@ -10,8 +10,9 @@
 
 	$(document).ready(function(){
 		var localUserName="";
-		if(sessionStorage.username){
-			localUserName = sessionStorage.username;
+		alert(sessionStorage.userName);
+		if(sessionStorage.userName){
+			localUserName = sessionStorage.userName;
 			$("#localUser").html(localUserName);
 			$("#login-action").hide();
 		}else{
